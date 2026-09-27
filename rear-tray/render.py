@@ -3,15 +3,12 @@ import sys
 import trimesh, numpy as np
 from PIL import Image, ImageDraw
 m=trimesh.load('kona_organiser.stl').subdivide_to_size(3.0)
-def render(el,az,W=900,H=650,crop=None):
+def render(el,az,W=900,H=650):
     a,e=np.radians(az),np.radians(el)
     Rz=np.array([[np.cos(a),-np.sin(a),0],[np.sin(a),np.cos(a),0],[0,0,1]])
     Rx=np.array([[1,0,0],[0,np.cos(e),-np.sin(e)],[0,np.sin(e),np.cos(e)]])
     R=Rx@Rz; v=m.vertices@R.T; n=m.face_normals@R.T
-    if crop is None: lo,hi=v.min(0),v.max(0)
-    else:
-        cc=np.array([[x,y,z] for x in (crop[0][0],crop[1][0]) for y in (crop[0][1],crop[1][1]) for z in (crop[0][2],crop[1][2])])@R.T
-        lo,hi=cc.min(0),cc.max(0)
+    lo,hi=v.min(0),v.max(0)
     s=0.85*min(W/(hi[0]-lo[0]),H/(hi[1]-lo[1])); c=(lo+hi)/2
     px=(v[:,0]-c[0])*s+W/2; py=H/2-(v[:,1]-c[1])*s; pz=v[:,2]
     L=np.array([-0.4,0.6,0.7]);L/=np.linalg.norm(L)
@@ -30,10 +27,12 @@ def render(el,az,W=900,H=650,crop=None):
         ins=(w0>=-1e-6)&(w1>=-1e-6)&(w2>=-1e-6); zz=w0*z[0]+w1*z[1]+w2*z[2]
         sub=zb[y0:y1+1,x0:x1+1]; upd=ins&(zz>sub); sub[upd]=zz[upd]; img[y0:y1+1,x0:x1+1][upd]=base*sh
     return Image.fromarray(img.astype(np.uint8))
-iso=render(-55,160)
-close=render(-50,110,crop=(np.array([55,-62,0]),np.array([94,62,20])))
-out=Image.new('RGB',(1800,720),(245,245,245)); out.paste(iso,(0,40)); out.paste(close,(900,40))
+iso=render(-55,200)   # front at left, like the markup
+top=render(0,0)
+# top view: draw outline edges by thresholding shading isn't needed; use a slightly tilted view instead
+top=render(-15,0)
+out=Image.new('RGB',(1800,720),(245,245,245)); out.paste(iso,(0,40)); out.paste(top,(900,40))
 d=ImageDraw.Draw(out)
-d.text((20,10),"Overview (same angle as your markup: front = left end)",fill=(0,0,0)); d.text((920,10),"Close-up of the front: two snap-in lip balm cradles, key pocket beside them",fill=(0,0,0))
-d.text((20,695),(sys.argv[1] if len(sys.argv)>1 else "Kona console organiser v3 - 187 x 123 x 20 mm - PLA/PETG, no supports"),fill=(0,0,0))
+d.text((20,10),"Overview (front = left end, as in your markup)",fill=(0,0,0)); d.text((920,10),"Near top-down: tapers from 118.5 mm (back, right) to 133 mm (front, left) starting 120 mm from the back",fill=(0,0,0))
+d.text((20,695),(sys.argv[1] if len(sys.argv)>1 else "Kona console organiser v4 - 187 long x 118.5-133 wide x 20 mm - PLA/PETG, no supports"),fill=(0,0,0))
 out.save('kona_organiser_preview.png')

@@ -2,20 +2,21 @@
 Parametric centre-console organiser tray for a 2025 Hyundai Kona.
 Run:  python3 kona_organiser.py   -> writes kona_organiser.stl / .step next to this file.
 
-Coordinates: X = along the long edge, Y = across it, Z = up. The cradle end (+X) is the front.
+Coordinates: X = along the car (+X is the front), Y = across the car, Z = up.
 All dimensions in mm. Print flat, open side up, no supports.
 """
 import math, os
 import cadquery as cq
 
-# ---- Console bin floor (read from the tape photos) ----
-FLOOR_L = 190.0      # along the car, tape read ~19 cm across the grey floor insert
-FLOOR_W = 130.0      # across the car, tape read ~13 cm (12 cm at the narrow end)
-CLEARANCE = 3.0      # total gap removed from each dimension (1.5 mm per side)
+# ---- Console bin floor (tape photos + the user's measurements) ----
+FLOOR_L = 190.0          # back to front
+FLOOR_W_BACK = 120.0     # constant width over the back section
+FLOOR_W_FRONT = 135.0    # width at the front edge
+TAPER_START = 120.0      # distance from the back where the taper begins
+CLEAR_END = 1.5          # gap per end (front/back)
+CLEAR_SIDE = 0.75        # gap per side; kept tight so the taper stops it shifting
 
 # ---- Tray ----
-TRAY_L = FLOOR_L - CLEARANCE
-TRAY_W = FLOOR_W - CLEARANCE - 4.0   # extra 4 mm because the floor narrows to ~12 cm at one end
 HEIGHT = 20.0        # overall wall height (low profile)
 FLOOR_T = 1.0        # base thickness (5 layers @ 0.2)
 WALL_T = 1.6         # outer walls (4 lines @ 0.4 nozzle)
@@ -28,10 +29,10 @@ BALM_L = 68.0
 BALM_FIT = 0.4       # diametral clearance -> snug, no rattle
 BALM_AXIAL = 0.6     # end-to-end clearance
 SNAP_GAP = 13.8      # width of the top opening; < channel dia so the tube clicks in
-BALM_COUNT = 2       # cradles laid end to end along one long wall
+BALM_COUNT = 2       # cradles side by side at the front, parallel to the front wall
 CRADLE_WALL = 1.6
-GRIP_W = 22.0
-CORNER_OFFSET = 6.4  # gap between the -Y wall and the channel ends (clears the corner fillet)        # finger notch in the middle of each cradle
+GRIP_W = 22.0        # finger notch in the middle of each cradle
+END_GAP = 6.0        # gap between the side wall and the channel ends (clears the corner)
 
 # ---- Derived ----
 ch_d = BALM_D + BALM_FIT
@@ -39,34 +40,47 @@ ch_r = ch_d / 2
 ch_len = BALM_L + BALM_AXIAL
 zc = FLOOR_T + ch_r                                     # channel axis height
 cradle_top = zc + math.sqrt(ch_r**2 - (SNAP_GAP / 2) ** 2)
-strip_w = ch_d + 2 * CRADLE_WALL                        # cradle strip width (Y)
-cradle_len = ch_len + 2 * CRADLE_WALL                   # one cradle's length (X)
 
-x0, y0 = -TRAY_L / 2, -TRAY_W / 2
+TRAY_L = FLOOR_L - 2 * CLEAR_END
+xb, xf = -TRAY_L / 2, TRAY_L / 2                         # back / front faces
+x_taper = -FLOOR_L / 2 + TAPER_START
+
+
+def half_w(x):
+    """Tray outer half-width at position x."""
+    if x <= x_taper:
+        w = FLOOR_W_BACK
+    else:
+        w = FLOOR_W_BACK + (FLOOR_W_FRONT - FLOOR_W_BACK) * (x - x_taper) / (FLOOR_L / 2 - x_taper)
+    return w / 2 - CLEAR_SIDE
+
+
+def outline(inset=0.0):
+    hb, hf, ht = half_w(xb) - inset, half_w(xf) - inset, half_w(x_taper) - inset
+    pts = [(xb + inset, -hb), (x_taper, -ht), (xf - inset, -hf),
+           (xf - inset, hf), (x_taper, ht), (xb + inset, hb)]
+    return cq.Workplane("XY").polyline(pts).close()
 
 
 def build():
-    # Outer shell
-    envelope = (cq.Workplane("XY").rect(TRAY_L, TRAY_W).extrude(HEIGHT)
-                .edges("|Z").fillet(CORNER_R))
-    tray = envelope
-    cavity = (cq.Workplane("XY").workplane(offset=FLOOR_T)
-              .rect(TRAY_L - 2 * WALL_T, TRAY_W - 2 * WALL_T).extrude(HEIGHT)
-              .edges("|Z").fillet(CORNER_R - WALL_T))
-    tray = tray.cut(cavity)
+    envelope = outline().extrude(HEIGHT).edges("|Z").fillet(CORNER_R)
+    cavity = (outline(WALL_T).extrude(HEIGHT).edges("|Z").fillet(CORNER_R - WALL_T)
+              .translate((0, 0, FLOOR_T)))
+    tray = envelope.cut(cavity)
 
-    # Lip-balm cradles along the front short wall (built at -X, mirrored to +X at the end),
-    # axis across the tray (Y), rows stacked front to back.
-    ix0 = x0 + WALL_T
-    iy0, iy1 = y0 + WALL_T, -y0 - WALL_T
+    # Lip-balm cradles at the front, axis across the car (Y), rows stacked back from the front wall.
+    ixf = xf - WALL_T
     pitch = ch_d + CRADLE_WALL
-    zone_d = BALM_COUNT * pitch            # depth of the cradle zone (X)
-    cy = iy0 + CORNER_OFFSET + ch_len / 2  # keep channel ends clear of the corner fillet
+    zone_d = BALM_COUNT * pitch
+    zone_x0 = ixf - zone_d                              # back edge of the cradle zone
+    iy0 = -half_w(zone_x0) + WALL_T                     # narrowest inner wall within the zone
+    cy = iy0 + END_GAP + ch_len / 2
+    y_end = cy + ch_len / 2                             # far end of the channels
+    block = (cq.Workplane("XY").center((zone_x0 + xf) / 2, (-half_w(xf) - 1 + y_end + CRADLE_WALL) / 2)
+             .rect(xf - zone_x0, y_end + CRADLE_WALL + half_w(xf) + 1).extrude(cradle_top))
+    tray = tray.union(block.intersect(envelope))
     for i in range(BALM_COUNT):
-        bcx = ix0 + i * pitch + ch_r
-        block = (cq.Workplane("XY").center(ix0 + i * pitch + pitch / 2 - WALL_T / 2, cy)
-                 .rect(pitch + WALL_T, ch_len + 2 * CRADLE_WALL).extrude(cradle_top))
-        tray = tray.union(block.intersect(envelope))
+        bcx = ixf - i * pitch - ch_r
         chan = (cq.Workplane("XZ").workplane(offset=-(cy - ch_len / 2))
                 .center(bcx, zc).circle(ch_r).extrude(-ch_len))
         slot = (cq.Workplane("XY").workplane(offset=zc)
@@ -74,29 +88,21 @@ def build():
         grip = (cq.Workplane("XY").workplane(offset=zc)
                 .center(bcx, cy).rect(pitch + CRADLE_WALL + 0.01, GRIP_W).extrude(HEIGHT))
         tray = tray.cut(chan).cut(slot).cut(grip)
-    cradle_y1 = cy + ch_len / 2
 
-    # Fill between the corner and the channel ends
-    filler = (cq.Workplane("XY").center(ix0 + zone_d / 2 - WALL_T / 2, (iy0 + cy - ch_len / 2) / 2 - 1)
-              .rect(zone_d + WALL_T, cy - ch_len / 2 - iy0 + 2).extrude(cradle_top))
-    tray = tray.union(filler.intersect(envelope))
-
-    # Full-height divider across the tray behind the cradle zone
+    # Full-height divider behind the cradle zone, and a wall between cradles and key pocket
     div = (cq.Workplane("XY").workplane(offset=FLOOR_T)
-           .center(ix0 + zone_d + DIV_T / 2, 0).rect(DIV_T, iy1 - iy0 + 0.02).extrude(HEIGHT - FLOOR_T))
-    # Wall between the cradles and the key/coin pocket beside them
+           .center(zone_x0 - DIV_T / 2, 0).rect(DIV_T, 2 * half_w(xf)).extrude(HEIGHT - FLOOR_T))
     side = (cq.Workplane("XY").workplane(offset=FLOOR_T)
-            .center(ix0 + zone_d / 2, cradle_y1 + CRADLE_WALL / 2)
+            .center((zone_x0 + ixf) / 2, y_end + CRADLE_WALL / 2)
             .rect(zone_d + 0.02, CRADLE_WALL).extrude(HEIGHT - FLOOR_T))
-    tray = tray.union(div).union(side)
+    tray = tray.union(div.union(side).intersect(envelope))
 
-    # Finger scoops in the two short walls (the front one sits over the key pocket)
-    scoop_y = (cradle_y1 + CRADLE_WALL + iy1) / 2
-    for sx in (x0, -x0):
+    # Finger scoops: front one over the key pocket, back one centred
+    iy_pocket_end = half_w(zone_x0) - WALL_T
+    for sx, sy in ((xf, (y_end + CRADLE_WALL + iy_pocket_end) / 2), (xb, 0.0)):
         scoop = (cq.Workplane("YZ").workplane(offset=sx - 5)
-                 .center(scoop_y, HEIGHT).circle(12).extrude(10))
+                 .center(sy, HEIGHT).circle(12).extrude(10))
         tray = tray.cut(scoop)
-    tray = tray.mirror("YZ")                # cradles end up at +X, matching the marked-up preview
     return tray
 
 
@@ -107,4 +113,4 @@ if __name__ == "__main__":
     cq.exporters.export(t, os.path.join(here, "kona_organiser.step"))
     bb = t.val().BoundingBox()
     print(f"size {bb.xlen:.1f} x {bb.ylen:.1f} x {bb.zlen:.1f} mm, volume {t.val().Volume()/1000:.1f} cm3")
-    print(f"cradle top {cradle_top:.2f}, axis {zc:.2f}")
+    print(f"width back {2*half_w(xb):.1f}, front {2*half_w(xf):.1f}; cradle top {cradle_top:.2f}")
