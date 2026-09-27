@@ -35,6 +35,7 @@ GRIP_W = 22.0        # finger notch in the middle of each cradle
 BACK_NOTCH_W = 24.0  # finger notch in the wall behind the cradles
 
 POCKET_L = 58.0      # key pocket depth from the front wall (fits a 55 x 33 mm fob)
+POCKET_W = 40.0      # key pocket width; the rest is filled solid so the fob can't slide
 
 # ---- Lift ridges (half-pencil bumps on the back of the cradle divider) ----
 RIDGE_D = 8.0        # pencil size across the corners (protrudes RIDGE_D/2 = 4 mm)
@@ -112,7 +113,7 @@ def build():
             .center(pocket_x0 - DIV_T / 2, (y_end + hw) / 2).rect(DIV_T, hw - y_end).extrude(HEIGHT - FLOOR_T))
     side = side.union(back)
     # Fill the tapered outer wall beside the pocket so the pocket is a plain rectangle
-    y_straight = half_w(pocket_x0) - WALL_T
+    y_straight = min(half_w(pocket_x0) - WALL_T, y_side + POCKET_W)
     fill = (cq.Workplane("XY").center((pocket_x0 + xf) / 2, (y_straight + hw + 1) / 2)
             .rect(xf - pocket_x0, hw + 1 - y_straight).extrude(HEIGHT))
     side = side.union(fill)

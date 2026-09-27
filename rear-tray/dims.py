@@ -7,7 +7,7 @@ m=trimesh.load(D+'kona_organiser.stl')
 xb,xf,xt=k.xb,k.xf,k.x_taper; hw=k.half_w
 ixf=xf-k.WALL_T; pitch=k.ch_d+k.CRADLE_WALL; zone_x0=ixf-2*pitch
 iy0=-hw(zone_x0)+k.WALL_T; cy=iy0+k.END_GAP+k.ch_len/2; y_end=cy+k.ch_len/2
-px0=ixf-k.POCKET_L; ystr=hw(px0)-k.WALL_T
+px0=ixf-k.POCKET_L; ystr=min(hw(px0)-k.WALL_T, y_end+k.CRADLE_WALL+k.POCKET_W)
 fig,ax=plt.subplots(figsize=(15,11))
 sec=m.section(plane_origin=[0,0,6],plane_normal=[0,0,1])
 p2,T=sec.to_2D(to_2D=np.eye(4))
