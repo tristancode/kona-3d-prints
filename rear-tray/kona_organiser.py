@@ -113,8 +113,8 @@ def build():
                     .center(zone_x0 - DIV_T / 2, cy).rect(DIV_T + 2, BACK_NOTCH_W).extrude(HEIGHT)))
     tray = tray.cut(notch)
 
-    # Lift ridges: two half-pencil (half-hexagon) ridges on the back of the cradle divider,
-    # either side of the finger notch, to hook a finger under and lift the tray.
+    # Lift ridge: one half-pencil (half-hexagon) ridge on the back of the cradle divider,
+    # on the tray-centre side of the finger notch, to hook a finger under and lift the tray.
     # Cut across the flats so the underside is a 60 deg slope plus a tiny bridge: no supports.
     r, h = RIDGE_D / 2, RIDGE_D / 2 * math.sqrt(3) / 2
     xw = zone_x0 - DIV_T                                 # back face of the divider
@@ -122,8 +122,7 @@ def build():
     prof = [(xw + 0.2, zr + h), (xw - r / 2, zr + h), (xw - r, zr),
             (xw - r / 2, zr - h), (xw + 0.2, zr - h)]
     y_wall = half_w(xw) - WALL_T
-    for y1, y2 in ((cy - nr - RIDGE_GAP - RIDGE_L, cy - nr - RIDGE_GAP),
-                   (cy + nr + RIDGE_GAP, cy + nr + RIDGE_GAP + RIDGE_L)):
+    for y1, y2 in ((cy + nr + RIDGE_GAP, cy + nr + RIDGE_GAP + RIDGE_L),):  # middle side only
         y1, y2 = max(y1, -y_wall), min(y2, y_wall)
         ridge = (cq.Workplane("XZ").workplane(offset=-y2)
                  .polyline(prof).close().extrude(y2 - y1))
