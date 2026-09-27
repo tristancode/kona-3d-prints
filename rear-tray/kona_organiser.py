@@ -111,6 +111,11 @@ def build():
     back = (cq.Workplane("XY").workplane(offset=FLOOR_T)
             .center(pocket_x0 - DIV_T / 2, (y_end + hw) / 2).rect(DIV_T, hw - y_end).extrude(HEIGHT - FLOOR_T))
     side = side.union(back)
+    # Fill the tapered outer wall beside the pocket so the pocket is a plain rectangle
+    y_straight = half_w(pocket_x0) - WALL_T
+    fill = (cq.Workplane("XY").center((pocket_x0 + xf) / 2, (y_straight + hw + 1) / 2)
+            .rect(xf - pocket_x0, hw + 1 - y_straight).extrude(HEIGHT))
+    side = side.union(fill)
     tray = tray.union(div.union(side).intersect(envelope))
 
     # U-shaped finger notch through the divider behind the cradles, lined up with the
