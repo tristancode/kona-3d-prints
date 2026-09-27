@@ -13,9 +13,9 @@ Inferred / assumed:
 - Clearance: 1.5 mm each side lengthwise, and 3.5 mm each side across the car to allow for the 12 cm narrow end.
 
 ## Layout
-- Two snap-in lip balm cradles end to end along the wide (187 mm) front edge. Put that edge towards the front of the car. The top opening is 13.8 mm, narrower than the 15.7 mm channel, so the tube clicks in and can't roll. Closed ends stop it sliding. Use the finger notch in the middle to pull it out.
-- A small key/coin pocket at the end of the cradle strip.
-- One main bay (~110 mm) for a phone or wallet, plus one side bay (~70 mm) for cards and cables.
+- Two snap-in lip balm cradles side by side across the front short end (the end circled in the user's markup), each lying parallel to the front wall. The top opening is 13.8 mm, narrower than the 15.7 mm channel, so the tube clicks in and can't roll. Closed ends stop it sliding. Use the finger notch in the middle to pull it out.
+- A small key/coin pocket beside the cradles at the front.
+- One large bay (~148 x 120 mm) behind them, big enough for a phone or wallet.
 - Finger scoops in both short ends so you can lift the tray out.
 
 ## Print settings (Bambu Lab, any bed)

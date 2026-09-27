@@ -31,9 +31,9 @@ def render(el,az,W=900,H=650,crop=None):
         sub=zb[y0:y1+1,x0:x1+1]; upd=ins&(zz>sub); sub[upd]=zz[upd]; img[y0:y1+1,x0:x1+1][upd]=base*sh
     return Image.fromarray(img.astype(np.uint8))
 iso=render(-55,160)
-close=render(-50,165,crop=(np.array([-94,-62,0]),np.array([94,-35,20])))
+close=render(-50,110,crop=(np.array([55,-62,0]),np.array([94,62,20])))
 out=Image.new('RGB',(1800,720),(245,245,245)); out.paste(iso,(0,40)); out.paste(close,(900,40))
 d=ImageDraw.Draw(out)
-d.text((20,10),"Overview (front = wide edge, at the back of this view)",fill=(0,0,0)); d.text((920,10),"Close-up: two snap-in lip balm cradles along the wide front edge, key pocket at the end",fill=(0,0,0))
-d.text((20,695),(sys.argv[1] if len(sys.argv)>1 else "Kona console organiser v2 - 187 x 123 x 20 mm - PLA/PETG, no supports"),fill=(0,0,0))
+d.text((20,10),"Overview (same angle as your markup: front = left end)",fill=(0,0,0)); d.text((920,10),"Close-up of the front: two snap-in lip balm cradles, key pocket beside them",fill=(0,0,0))
+d.text((20,695),(sys.argv[1] if len(sys.argv)>1 else "Kona console organiser v3 - 187 x 123 x 20 mm - PLA/PETG, no supports"),fill=(0,0,0))
 out.save('kona_organiser_preview.png')
