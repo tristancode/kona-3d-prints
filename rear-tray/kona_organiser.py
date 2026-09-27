@@ -32,6 +32,7 @@ SNAP_GAP = 13.8      # width of the top opening; < channel dia so the tube click
 BALM_COUNT = 2       # cradles side by side at the front, parallel to the front wall
 CRADLE_WALL = 1.6
 GRIP_W = 22.0        # finger notch in the middle of each cradle
+BACK_NOTCH_W = 24.0  # finger notch in the wall behind the cradles
 END_GAP = 6.0        # gap between the side wall and the channel ends (clears the corner)
 
 # ---- Derived ----
@@ -96,6 +97,15 @@ def build():
             .center((zone_x0 + ixf) / 2, y_end + CRADLE_WALL / 2)
             .rect(zone_d + 0.02, CRADLE_WALL).extrude(HEIGHT - FLOOR_T))
     tray = tray.union(div.union(side).intersect(envelope))
+
+    # U-shaped finger notch through the divider behind the cradles, lined up with the
+    # grip notches, so the balm can be pinched out from the main bay
+    nr = BACK_NOTCH_W / 2
+    notch = (cq.Workplane("YZ").workplane(offset=zone_x0 - DIV_T - 1)
+             .center(cy, zc + nr).circle(nr).extrude(DIV_T + 2)
+             .union(cq.Workplane("XY").workplane(offset=zc + nr)
+                    .center(zone_x0 - DIV_T / 2, cy).rect(DIV_T + 2, BACK_NOTCH_W).extrude(HEIGHT)))
+    tray = tray.cut(notch)
 
     # Finger scoops: front one over the key pocket, back one centred
     iy_pocket_end = half_w(zone_x0) - WALL_T

@@ -10,6 +10,7 @@ Assumed: the Burt's Bees tube is 15.3 mm dia x 68 mm long (standard 4.25 g tube)
 
 ## Layout
 - Two snap-in lip balm cradles side by side across the front short end (the end circled in the user's markup), each lying parallel to the front wall. The top opening is 13.8 mm, narrower than the 15.7 mm channel, so the tube clicks in and can't roll. Closed ends stop it sliding. Use the finger notch in the middle to pull it out.
+- A 24 mm U-shaped finger notch in the wall behind the cradles, lined up with their grip notches, so you can reach in from the main bay and pinch a balm out (BACK_NOTCH_W).
 - A small key/coin pocket beside the cradles at the front.
 - One large bay (~148 x 120 mm) behind them, big enough for a phone or wallet.
 - Finger scoops in both short ends so you can lift the tray out.
