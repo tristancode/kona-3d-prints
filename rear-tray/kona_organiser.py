@@ -2,7 +2,7 @@
 Parametric centre-console organiser tray for a 2025 Hyundai Kona.
 Run:  python3 kona_organiser.py   -> writes kona_organiser.stl / .step next to this file.
 
-Coordinates: X = along the car (front/back), Y = across the car, Z = up.
+Coordinates: X = along the long (wide) edge, Y = across it (-Y is the front), Z = up.
 All dimensions in mm. Print flat, open side up, no supports.
 """
 import math, os
@@ -30,7 +30,8 @@ BALM_AXIAL = 0.6     # end-to-end clearance
 SNAP_GAP = 13.8      # width of the top opening; < channel dia so the tube clicks in
 BALM_COUNT = 2       # cradles laid end to end along one long wall
 CRADLE_WALL = 1.6
-GRIP_W = 22.0        # finger notch in the middle of each cradle
+GRIP_W = 22.0
+CORNER_OFFSET = 6.4  # gap between the -Y wall and the channel ends (clears the corner fillet)        # finger notch in the middle of each cradle
 
 # ---- Derived ----
 ch_d = BALM_D + BALM_FIT
@@ -46,59 +47,58 @@ x0, y0 = -TRAY_L / 2, -TRAY_W / 2
 
 def build():
     # Outer shell
-    tray = (cq.Workplane("XY").rect(TRAY_L, TRAY_W).extrude(HEIGHT)
-            .edges("|Z").fillet(CORNER_R))
+    envelope = (cq.Workplane("XY").rect(TRAY_L, TRAY_W).extrude(HEIGHT)
+                .edges("|Z").fillet(CORNER_R))
+    tray = envelope
     cavity = (cq.Workplane("XY").workplane(offset=FLOOR_T)
               .rect(TRAY_L - 2 * WALL_T, TRAY_W - 2 * WALL_T).extrude(HEIGHT)
               .edges("|Z").fillet(CORNER_R - WALL_T))
     tray = tray.cut(cavity)
 
-    # Lip-balm cradles along the -Y wall, starting at the -X end
-    iy0 = y0 + WALL_T                       # inner face of -Y wall
-    cy = iy0 + strip_w / 2 - CRADLE_WALL / 2  # share the outer wall as one cradle side
-    strip_w_eff = strip_w - CRADLE_WALL
-    cx_start = x0 + WALL_T
+    # Lip-balm cradles laid end to end along the front (-Y, wide) wall, axis along X.
+    ix0, ix1 = x0 + WALL_T, -x0 - WALL_T
+    iy0, iy1 = y0 + WALL_T, -y0 - WALL_T
+    zone_d = ch_d + CRADLE_WALL            # depth of the cradle strip (Y), front wall is one side
+    cy = iy0 + ch_r                        # channel axis Y
+    bx = ix0 + CORNER_OFFSET               # first channel start, clear of the corner fillet
     for i in range(BALM_COUNT):
-        bx0 = cx_start + i * (cradle_len - CRADLE_WALL)
-        bcx = bx0 + cradle_len / 2
-        block = (cq.Workplane("XY").center(bcx, iy0 + strip_w_eff / 2)
-                 .rect(cradle_len, strip_w_eff).extrude(cradle_top))
-        tray = tray.union(block)
-        # channel (cylinder along X) + slot to the top
+        bcx = bx + CRADLE_WALL * i + ch_len * i + ch_len / 2
         chan = (cq.Workplane("YZ").workplane(offset=bcx - ch_len / 2)
-                .center(iy0 + ch_r, zc).circle(ch_r).extrude(ch_len))
+                .center(cy, zc).circle(ch_r).extrude(ch_len))
         slot = (cq.Workplane("XY").workplane(offset=zc)
-                .center(bcx, iy0 + ch_r).rect(ch_len, SNAP_GAP).extrude(HEIGHT))
-        # finger notch: open the cradle walls down to the axis in the middle
+                .center(bcx, cy).rect(ch_len, SNAP_GAP).extrude(HEIGHT))
         grip = (cq.Workplane("XY").workplane(offset=zc)
-                .center(bcx, iy0 + strip_w_eff / 2).rect(GRIP_W, strip_w_eff + 0.01).extrude(HEIGHT))
-        tray = tray.cut(chan).cut(slot).cut(grip)
-    cradles_end = cx_start + BALM_COUNT * (cradle_len - CRADLE_WALL) + CRADLE_WALL
+                .center(bcx, iy0 + zone_d / 2).rect(GRIP_W, zone_d + 0.01).extrude(HEIGHT))
+        cut = chan.union(slot).union(grip)
+        if i == 0:
+            cuts = cut
+        else:
+            cuts = cuts.union(cut)
+    x_end = bx + BALM_COUNT * ch_len + (BALM_COUNT - 1) * CRADLE_WALL + CRADLE_WALL
+    block = (cq.Workplane("XY").center((ix0 - WALL_T + x_end) / 2, iy0 - WALL_T + (zone_d + WALL_T) / 2)
+             .rect(x_end - ix0 + WALL_T, zone_d + WALL_T).extrude(cradle_top))
+    tray = tray.union(block.intersect(envelope)).cut(cuts)
 
-    inner_x1 = -x0 - WALL_T
-    strip_y1 = iy0 + strip_w_eff
-    # Long divider separating the cradle strip from the main area
+    # Key/coin pocket after the cradles: full-height walls
     div = (cq.Workplane("XY").workplane(offset=FLOOR_T)
-           .center((cradles_end - CRADLE_WALL + inner_x1) / 2, strip_y1 - DIV_T / 2)
-           .rect(inner_x1 - (cradles_end - CRADLE_WALL), DIV_T).extrude(HEIGHT - FLOOR_T))
-    tray = tray.union(div)
-    # Short wall closing the pocket next to the cradles
+           .center((x_end - CRADLE_WALL + ix1) / 2, iy0 + zone_d - DIV_T / 2)
+           .rect(ix1 - x_end + CRADLE_WALL + 0.02, DIV_T).extrude(HEIGHT - FLOOR_T))
     end = (cq.Workplane("XY").workplane(offset=FLOOR_T)
-           .center(cradles_end - CRADLE_WALL / 2, iy0 + strip_w_eff / 2)
-           .rect(CRADLE_WALL, strip_w_eff).extrude(HEIGHT - FLOOR_T))
-    tray = tray.union(end)
+           .center(x_end - CRADLE_WALL / 2, iy0 + zone_d / 2)
+           .rect(CRADLE_WALL, zone_d + 0.02).extrude(HEIGHT - FLOOR_T))
+    tray = tray.union(div).union(end)
 
-    # Cross divider: phone/wallet bay (+X) and cards/misc bay (-X)
-    bay_split = x0 + WALL_T + 70.0
+    # Cross divider: cards/misc bay (-X) and phone/wallet bay (+X)
+    bay_split = ix0 + 70.0
     cross = (cq.Workplane("XY").workplane(offset=FLOOR_T)
-             .center(bay_split, (strip_y1 + (-y0 - WALL_T)) / 2)
-             .rect(DIV_T, (-y0 - WALL_T) - strip_y1).extrude(HEIGHT - FLOOR_T))
+             .center(bay_split, (iy0 + zone_d + iy1) / 2)
+             .rect(DIV_T, iy1 - iy0 - zone_d + 0.02).extrude(HEIGHT - FLOOR_T))
     tray = tray.union(cross)
 
     # Finger scoops in the two short walls so the tray lifts out easily
     for sx in (x0, -x0):
         scoop = (cq.Workplane("YZ").workplane(offset=sx - 5)
-                 .center(TRAY_W * 0.15, HEIGHT).circle(12).extrude(10))
+                 .center((iy0 + zone_d + iy1) / 2, HEIGHT).circle(12).extrude(10))
         tray = tray.cut(scoop)
     return tray
 
