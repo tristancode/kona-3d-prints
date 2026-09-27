@@ -34,6 +34,8 @@ CRADLE_WALL = 1.6
 GRIP_W = 22.0        # finger notch in the middle of each cradle
 BACK_NOTCH_W = 24.0  # finger notch in the wall behind the cradles
 
+POCKET_L = 58.0      # key pocket depth from the front wall (fits a 55 x 33 mm fob)
+
 # ---- Lift ridges (half-pencil bumps on the back of the cradle divider) ----
 RIDGE_D = 8.0        # pencil size across the corners (protrudes RIDGE_D/2 = 4 mm)
 RIDGE_L = 22.0       # length of each ridge
@@ -96,12 +98,19 @@ def build():
                 .center(bcx, cy).rect(pitch + CRADLE_WALL + 0.01, GRIP_W).extrude(HEIGHT))
         tray = tray.cut(chan).cut(slot).cut(grip)
 
-    # Full-height divider behind the cradle zone, and a wall between cradles and key pocket
+    # Full-height divider behind the cradles; the key pocket beside them runs further back
+    # (POCKET_L from the front wall) so a car key fob lies flat in it.
+    hw = half_w(xf)
+    pocket_x0 = ixf - POCKET_L
+    y_side = y_end + CRADLE_WALL
     div = (cq.Workplane("XY").workplane(offset=FLOOR_T)
-           .center(zone_x0 - DIV_T / 2, 0).rect(DIV_T, 2 * half_w(xf)).extrude(HEIGHT - FLOOR_T))
+           .center(zone_x0 - DIV_T / 2, (-hw + y_side) / 2).rect(DIV_T, y_side + hw).extrude(HEIGHT - FLOOR_T))
     side = (cq.Workplane("XY").workplane(offset=FLOOR_T)
-            .center((zone_x0 + ixf) / 2, y_end + CRADLE_WALL / 2)
-            .rect(zone_d + 0.02, CRADLE_WALL).extrude(HEIGHT - FLOOR_T))
+            .center((pocket_x0 + ixf) / 2, y_end + CRADLE_WALL / 2)
+            .rect(ixf - pocket_x0 + 0.02, CRADLE_WALL).extrude(HEIGHT - FLOOR_T))
+    back = (cq.Workplane("XY").workplane(offset=FLOOR_T)
+            .center(pocket_x0 - DIV_T / 2, (y_end + hw) / 2).rect(DIV_T, hw - y_end).extrude(HEIGHT - FLOOR_T))
+    side = side.union(back)
     tray = tray.union(div.union(side).intersect(envelope))
 
     # U-shaped finger notch through the divider behind the cradles, lined up with the
@@ -123,7 +132,7 @@ def build():
             (xw - r / 2, zr - h), (xw + 0.2, zr - h)]
     y_wall = half_w(xw) - WALL_T
     for y1, y2 in ((cy + nr + RIDGE_GAP, cy + nr + RIDGE_GAP + RIDGE_L),):  # middle side only
-        y1, y2 = max(y1, -y_wall), min(y2, y_wall)
+        y1, y2 = max(y1, -y_wall), min(y2, y_wall, y_end)   # stay on the divider
         ridge = (cq.Workplane("XZ").workplane(offset=-y2)
                  .polyline(prof).close().extrude(y2 - y1))
         tray = tray.union(ridge)
