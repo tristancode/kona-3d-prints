@@ -33,6 +33,12 @@ BALM_COUNT = 2       # cradles side by side at the front, parallel to the front 
 CRADLE_WALL = 1.6
 GRIP_W = 22.0        # finger notch in the middle of each cradle
 BACK_NOTCH_W = 24.0  # finger notch in the wall behind the cradles
+
+# ---- Lift tabs (left and right walls, just behind the cradles) ----
+TAB_L = 30.0         # length along the wall
+TAB_H = 10.0         # height above the rim
+TAB_T = 3.2          # thickness (grows inward from the outer wall)
+TAB_R = 6.0          # top corner rounding
 END_GAP = 6.0        # gap between the side wall and the channel ends (clears the corner)
 
 # ---- Derived ----
@@ -106,6 +112,18 @@ def build():
              .union(cq.Workplane("XY").workplane(offset=zc + nr)
                     .center(zone_x0 - DIV_T / 2, cy).rect(DIV_T + 2, BACK_NOTCH_W).extrude(HEIGHT)))
     tray = tray.cut(notch)
+
+    # Lift tabs: rounded bumps rising above the left and right walls just behind the cradles
+    tall = outline().extrude(HEIGHT + TAB_H + 5).edges("|Z").fillet(CORNER_R)
+    tab_x = zone_x0 - DIV_T - TAB_L / 2 - 2
+    for side in (-1, 1):
+        yo = half_w(tab_x + TAB_L / 2)                   # widest point of the wall under the tab
+        y_out, y_in = side * (yo + 1), side * (yo - TAB_T)
+        blob = (cq.Workplane("XY").workplane(offset=HEIGHT - 2)
+                .center(tab_x, (y_out + y_in) / 2).rect(TAB_L, abs(y_out - y_in))
+                .extrude(TAB_H + 2)
+                .edges("|Y and >Z").fillet(TAB_R))
+        tray = tray.union(blob.intersect(tall))
 
     # Finger scoops: front one over the key pocket, back one centred
     iy_pocket_end = half_w(zone_x0) - WALL_T
