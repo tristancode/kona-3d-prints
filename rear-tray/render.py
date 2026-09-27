@@ -29,9 +29,9 @@ def render(el,az,W=900,H=650,crop=None):
         sub=zb[y0:y1+1,x0:x1+1]; upd=ins&(zz>sub); sub[upd]=zz[upd]; img[y0:y1+1,x0:x1+1][upd]=base*sh
     return Image.fromarray(img.astype(np.uint8))
 iso=render(-55,200)
-close=render(-60,90,crop=(np.array([0,-67,0]),np.array([94,67,30])))
+close=render(-60,90,crop=(np.array([20,-67,0]),np.array([94,67,20])))
 out=Image.new('RGB',(1800,720),(245,245,245)); out.paste(iso,(0,40)); out.paste(close,(900,40))
 d=ImageDraw.Draw(out)
-d.text((20,10),"Overview (front = left end)",fill=(0,0,0)); d.text((920,10),"From the main bay: lift tabs on both side walls behind the cradles, U finger notch in the divider",fill=(0,0,0))
-d.text((20,695),(sys.argv[1] if len(sys.argv)>1 else "Kona console organiser v6 - 187 long x 118.5-133 wide x 20 mm (30 mm at lift tabs) - PLA/PETG, no supports"),fill=(0,0,0))
+d.text((20,10),"Overview (front = left end)",fill=(0,0,0)); d.text((920,10),"From the main bay: half-pencil lift ridges either side of the U finger notch",fill=(0,0,0))
+d.text((20,695),(sys.argv[1] if len(sys.argv)>1 else "Kona console organiser v7 - 187 long x 118.5-133 wide x 20 mm - PLA/PETG, no supports"),fill=(0,0,0))
 out.save('kona_organiser_preview.png')

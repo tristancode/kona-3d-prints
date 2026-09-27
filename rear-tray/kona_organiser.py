@@ -34,11 +34,11 @@ CRADLE_WALL = 1.6
 GRIP_W = 22.0        # finger notch in the middle of each cradle
 BACK_NOTCH_W = 24.0  # finger notch in the wall behind the cradles
 
-# ---- Lift tabs (left and right walls, just behind the cradles) ----
-TAB_L = 30.0         # length along the wall
-TAB_H = 10.0         # height above the rim
-TAB_T = 3.2          # thickness (grows inward from the outer wall)
-TAB_R = 6.0          # top corner rounding
+# ---- Lift ridges (half-pencil bumps on the back of the cradle divider) ----
+RIDGE_D = 8.0        # pencil size across the corners (protrudes RIDGE_D/2 = 4 mm)
+RIDGE_L = 22.0       # length of each ridge
+RIDGE_GAP = 4.0      # gap between the finger notch and each ridge
+RIDGE_TOP_GAP = 1.5  # gap below the top of the divider
 END_GAP = 6.0        # gap between the side wall and the channel ends (clears the corner)
 
 # ---- Derived ----
@@ -113,17 +113,21 @@ def build():
                     .center(zone_x0 - DIV_T / 2, cy).rect(DIV_T + 2, BACK_NOTCH_W).extrude(HEIGHT)))
     tray = tray.cut(notch)
 
-    # Lift tabs: rounded bumps rising above the left and right walls just behind the cradles
-    tall = outline().extrude(HEIGHT + TAB_H + 5).edges("|Z").fillet(CORNER_R)
-    tab_x = zone_x0 - DIV_T - TAB_L / 2 - 2
-    for side in (-1, 1):
-        yo = half_w(tab_x + TAB_L / 2)                   # widest point of the wall under the tab
-        y_out, y_in = side * (yo + 1), side * (yo - TAB_T)
-        blob = (cq.Workplane("XY").workplane(offset=HEIGHT - 2)
-                .center(tab_x, (y_out + y_in) / 2).rect(TAB_L, abs(y_out - y_in))
-                .extrude(TAB_H + 2)
-                .edges("|Y and >Z").fillet(TAB_R))
-        tray = tray.union(blob.intersect(tall))
+    # Lift ridges: two half-pencil (half-hexagon) ridges on the back of the cradle divider,
+    # either side of the finger notch, to hook a finger under and lift the tray.
+    # Cut across the flats so the underside is a 60 deg slope plus a tiny bridge: no supports.
+    r, h = RIDGE_D / 2, RIDGE_D / 2 * math.sqrt(3) / 2
+    xw = zone_x0 - DIV_T                                 # back face of the divider
+    zr = HEIGHT - h - RIDGE_TOP_GAP                      # ridge centre height
+    prof = [(xw + 0.2, zr + h), (xw - r / 2, zr + h), (xw - r, zr),
+            (xw - r / 2, zr - h), (xw + 0.2, zr - h)]
+    y_wall = half_w(xw) - WALL_T
+    for y1, y2 in ((cy - nr - RIDGE_GAP - RIDGE_L, cy - nr - RIDGE_GAP),
+                   (cy + nr + RIDGE_GAP, cy + nr + RIDGE_GAP + RIDGE_L)):
+        y1, y2 = max(y1, -y_wall), min(y2, y_wall)
+        ridge = (cq.Workplane("XZ").workplane(offset=-y2)
+                 .polyline(prof).close().extrude(y2 - y1))
+        tray = tray.union(ridge)
 
     # Finger scoops: front one over the key pocket, back one centred
     iy_pocket_end = half_w(zone_x0) - WALL_T
