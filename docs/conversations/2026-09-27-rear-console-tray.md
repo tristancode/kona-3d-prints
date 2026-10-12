@@ -44,7 +44,7 @@ The design then went through ten rounds of changes in about 90 minutes:
 
 ## Deliverables and versions
 
-Each version is one commit in `rear-tray/`, tagged `rear-vN`. See "How this history was rebuilt" for which files are original.
+Each version is one commit in `rear-tray/`, named `rear: vN - ...` (tag `rear-vN` once `tools/tag-versions.sh` has been run). See "How this history was rebuilt" for which files are original.
 
 | Tag | Time (UTC) | What changed |
 |---|---|---|

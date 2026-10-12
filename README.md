@@ -12,7 +12,7 @@
 
 Each part folder has the CadQuery script, the render script, STL, 3MF and STEP files, a 3D preview, a dimensioned top view and a README with print settings and the numbers to change for fit.
 
-Every delivered version is one commit, dated when it was sent, and tagged `rear-vN` or `front-vN`. To get an old version: `git checkout rear-v4 -- rear-tray`. Rear v1 to v10 were rebuilt after the fact from the design session; see [the rear tray record](docs/conversations/2026-09-27-rear-console-tray.md#how-this-history-was-rebuilt).
+Every delivered version is one commit, dated when it was sent, with a message starting `rear: vN` or `front: vN`. To get an old version: `git checkout rear-v4 -- rear-tray` once the tags exist (run `tools/tag-versions.sh` once from your own checkout; Claude's sessions can't push tags), or find the commit with `git log --oneline`. Rear v1 to v10 were rebuilt after the fact from the design session; see [the rear tray record](docs/conversations/2026-09-27-rear-console-tray.md#how-this-history-was-rebuilt).
 
 ## Rebuilding a part
 ```
