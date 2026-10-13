@@ -17,3 +17,5 @@ One line per decision, in date order. The linked conversation record has the con
 | 2026-10-12 | Front strip width assumed 44 mm until measured | front tray conversation |
 | 2026-10-12 | One repo for all Kona prints, one folder per part, one commit per version (`<part>: vN - ...`), tagged `<part>-vN` | [repo conversation](conversations/2026-10-12-repo-setup.md) |
 | 2026-10-12 | Conversations stored as records plus the visible messages, as in `pizza-oven` | repo conversation |
+| 2026-10-13 | Front tray v2: overall length = caliper 156.6 + 5 = 161.6 mm; 13 mm tall throughout (lowest the balm snap allows) | [front tray conversation](conversations/2026-10-12-front-console-tray.md) |
+| 2026-10-13 | Front tray: finger well removed; half-pencil lift nub on the inside of the fob pocket's outer wall | front tray conversation |

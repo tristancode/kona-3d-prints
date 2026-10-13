@@ -31,3 +31,22 @@ The main body is 147 x 44 x 20 mm and 185 mm long including the tab. It prints w
 - My assumptions: the slot is at the same height as the main floor, and it sits against the drive-mode panel side.
 
 Dimensioned top view: `front-tray/kona_front_organiser_dimensions.png`. The README has the print settings and the values to change.
+
+---
+
+**Charlimit · 2026-10-13 05:44** (photos: `front-v1-test-print.jpg`, `front-strip-length-caliper.jpg`)
+
+Print it too long should be the calliper measurement plus 5mm. Also remove finger pocket, put the nub on the wall for the remote section, drop the height as much as possible and make the section on the left the same height as the rest
+
+---
+
+**Claude · 2026-10-13 05:58**
+
+v2 is ready. It's 161.6 mm long (your 156.6 mm plus 5) and 13 mm tall all the way along, including the left section. 13 mm is as low as it can go and still have the lip balm click in.
+
+- The finger well is gone. To make room, the lip balm cradle now starts in the narrow left section, and the space left over at the far end is a small bin.
+- The half-pencil nub is on the inside of the key fob pocket's outer wall, the side away from the drive-mode panel. It sticks out 3.5 mm and the fob still fits.
+- The width (44 mm) and the left section are unchanged, since those fitted.
+
+It's committed to kona-3d-prints as front v2.
+
