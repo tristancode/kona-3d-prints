@@ -23,7 +23,7 @@ for i, (el, az) in enumerate(((35, -60), (60, 120))):
     c = (mn + mx) / 2; r = (mx - mn).max() / 2
     ax.set_xlim(mn[0], mx[0]); ax.set_ylim(mn[1], mx[1]); ax.set_zlim(mn[2], mx[2]); ax.set_box_aspect(mx - mn, zoom=0.95)
     ax.view_init(el, az); ax.set_axis_off()
-fig.suptitle("Kona front console organiser (tongue left, lip balm middle, key fob right)")
+fig.suptitle(f"Kona front console organiser v2 ({k.OVERALL_L:.1f} long, {k.HEIGHT:g} tall)")
 plt.tight_layout(); plt.savefig(D + "kona_front_organiser_preview.png"); plt.close()
 
 # ---- Dimensioned top view ----
@@ -46,34 +46,34 @@ def dim(p0, p1, off, text, vertical=False):
                 va="bottom" if off > 0 else "top", fontsize=8.5)
 body = dict(fc="#d6e4f2", ec="k", lw=1.2)
 ax.add_patch(FancyBboxPatch((k.xl, k.yb), k.BODY_L, k.BODY_W, boxstyle=f"round,pad=0,rounding_size={k.CORNER_R}", **body))
-ax.add_patch(FancyBboxPatch((k.xl - k.TONGUE_L, k.ty0), k.TONGUE_L + k.WALL_T, k.TONGUE_W, boxstyle="round,pad=0,rounding_size=2", fc="#f4d9a8", ec="k", lw=1.2))
-rect(k.xl - k.TONGUE_L + k.WALL_T, k.xl, k.ty0 + k.WALL_T, k.ty1 - k.WALL_T, fc="white", ec="k", lw=0.6)
+ax.add_patch(FancyBboxPatch((k.xn, k.ty0), k.TONGUE_L + 6, k.TONGUE_W, boxstyle="round,pad=0,rounding_size=3", **body))
 iw0, iw1 = k.yb + k.WALL_T, k.yt - k.WALL_T
+nw0, nw1 = k.ty0 + k.WALL_T, k.ty1 - k.WALL_T
 rect(k.x_pocket0, k.xr - k.WALL_T, iw0, iw1, fc="white", ec="k", lw=0.8)       # fob pocket
-rect(k.x_well0, k.x_cr0, iw0, iw1, fc="white", ec="k", lw=0.8)                 # finger well
-rect(k.x_cr0, k.x_div, iw0, iw1, fc="#b9cfe6", ec="k", lw=0.8)                 # cradle block
-rect(k.x_ch0, k.x_ch1, -k.ch_r, k.ch_r, fc="white", ec="k", lw=0.6, ls="--")    # channel
-rect(k.x_ch0, k.x_ch1, -k.SNAP_GAP / 2, k.SNAP_GAP / 2, fc="none", ec="k", lw=0.6)
+rect(k.xl + k.WALL_T, k.x_div, iw0, iw1, fc="#b9cfe6", ec="k", lw=0.8)         # cradle block (wide part)
+rect(k.xn + k.WALL_T, k.x_cr0, nw0, nw1, fc="white", ec="k", lw=0.8)           # left bin
+rect(k.x_cr0, k.xl + k.WALL_T + 0.3, nw0, nw1, fc="#b9cfe6", ec="none")        # cradle block (narrow part)
+rect(k.x_ch0, k.x_ch1, k.cy - k.ch_r, k.cy + k.ch_r, fc="white", ec="k", lw=0.6, ls="--")
+rect(k.x_ch0, k.x_ch1, k.cy - k.SNAP_GAP / 2, k.cy + k.SNAP_GAP / 2, fc="none", ec="k", lw=0.6)
 gx = (k.x_ch0 + k.x_ch1) / 2
 rect(gx - k.GRIP_W / 2, gx + k.GRIP_W / 2, iw0, iw1, fc="#eef4fa", ec="k", lw=0.5, ls=":")
 r = k.RIDGE_D / 2
-rect(k.x_cr0 - r, k.x_cr0, -k.RIDGE_L / 2, k.RIDGE_L / 2, fc="#7a9cc6", ec="k", lw=0.6)
-ax.text((k.x_pocket0 + k.xr) / 2, 0, "KEY FOB\n58 x 40.8\n(fob 55 x 33)", ha="center", va="center", fontsize=9)
-ax.text(gx, -k.ch_r - 3.5, f"LIP BALM snap cradle  (13.8 opening, closed ends)", ha="center", va="top", fontsize=8)
-ax.text((k.xl - k.TONGUE_L + k.xl) / 2, (k.ty0 + k.ty1) / 2, "LOCATING\nTONGUE\n10 tall", ha="center", va="center", fontsize=8)
-ax.text((k.x_well0 + k.x_cr0) / 2 - 1.5, k.yb - 2, "finger well\n+ lift ridge", ha="center", va="top", fontsize=7.5)
-# dims
-dim((k.xl - k.TONGUE_L, k.yb), (k.xr, k.yb), -16, f"overall {k.BODY_L + k.TONGUE_L:.1f}")
-dim((k.xl, k.yb), (k.xr, k.yb), -9, f"main body {k.BODY_L:.1f}  (floor 150)")
-dim((k.xl - k.TONGUE_L, k.yt), (k.xl, k.yt), 6, f"tongue {k.TONGUE_L:.1f}  (slot 39.8)")
-dim((k.x_well0, k.yt), (k.x_cr0, k.yt), 6, f"{k.WELL_L:.1f}")
-dim((k.x_cr0, k.yt), (k.x_div, k.yt), 13, f"cradle {k.x_div - k.x_cr0:.1f}")
+px = k.x_pocket0 + k.POCKET_L / 2
+rect(px - k.RIDGE_L / 2, px + k.RIDGE_L / 2, iw0, iw0 + r, fc="#7a9cc6", ec="k", lw=0.6)
+ax.text(px, 3, "KEY FOB\n58 x 40.8\n(fob 55 x 33)", ha="center", va="center", fontsize=9)
+ax.text(px, iw0 + r + 1, "lift nub", ha="center", va="bottom", fontsize=7.5)
+ax.text(gx, k.cy - k.ch_r - 2, "LIP BALM snap cradle (13.8 opening, closed ends)", ha="center", va="top", fontsize=8)
+ax.text((k.xn + k.x_cr0) / 2, (k.ty0 + k.ty1) / 2, "small\nbin", ha="center", va="center", fontsize=8)
+dim((k.xn, k.yb), (k.xr, k.yb), -12, f"overall {k.OVERALL_L:.1f}  (caliper 156.6 + 5)")
+dim((k.xl, k.yb), (k.xr, k.yb), -5, f"wide section {k.BODY_L:.1f}")
+dim((k.xn, k.yt), (k.xl, k.yt), 13, f"narrow section {k.TONGUE_L:.1f}  (slot 39.8)")
+dim((k.xn + k.WALL_T, k.yt), (k.x_cr0, k.yt), 6, f"bin {k.BIN_L:.1f}")
 dim((k.x_ch0, k.yt), (k.x_ch1, k.yt), 6, f"channel {k.ch_len:.1f}")
 dim((k.x_pocket0, k.yt), (k.xr - k.WALL_T, k.yt), 6, f"pocket {k.POCKET_L:.1f}")
 dim((k.xr, k.yb), (k.xr, k.yt), 7, f"width {k.BODY_W:.1f}", vertical=True)
-dim((k.xl - k.TONGUE_L, k.ty0), (k.xl - k.TONGUE_L, k.ty1), -6, f"tongue {k.TONGUE_W:.1f} (slot 31.0)", vertical=True)
-dim((k.x_pocket0, iw0), (k.x_pocket0, iw1), 5, f"{k.POCKET_W:.1f}", vertical=True)
-ax.text(k.xr / 2, k.yt + 22, "TOP VIEW  (drive-mode panel side at top, as in the photos)   all mm, height 20, walls 1.6",
+dim((k.xn, k.ty0), (k.xn, k.ty1), -6, f"{k.TONGUE_W:.1f} (slot 31.0)", vertical=True)
+dim((k.x_pocket0 + 4, iw0), (k.x_pocket0 + 4, iw1), 5, f"{k.POCKET_W:.1f}", vertical=True)
+ax.text((k.xn + k.xr) / 2, k.yt + 24, f"TOP VIEW v2  (drive-mode panel side at top)   all mm, height {k.HEIGHT:g} throughout, walls 1.6",
         ha="center", fontsize=10, weight="bold")
-ax.set_aspect("equal"); ax.set_xlim(k.xl - k.TONGUE_L - 22, k.xr + 22); ax.set_ylim(k.yb - 26, k.yt + 27)
+ax.set_aspect("equal"); ax.set_xlim(k.xn - 22, k.xr + 22); ax.set_ylim(k.yb - 22, k.yt + 29)
 ax.axis("off"); plt.tight_layout(); plt.savefig(D + "kona_front_organiser_dimensions.png"); plt.close()

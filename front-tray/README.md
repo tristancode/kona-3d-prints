@@ -1,28 +1,28 @@
-# Kona 2025 front console organiser
+# Kona 2025 front console organiser (v2)
 
-Narrow tray for the strip of floor between the cupholders and the drive-mode panel. Main body 147 x 44 x 20 mm, plus a 38.3 x 29.5 x 10 mm locating tongue on the left that drops into the narrow slot so the tray can't slide or twist. Overall 185.3 mm long.
+Tray for the strip of floor between the cupholders and the drive-mode panel. It is 161.6 mm long overall (your caliper reading of 156.6 + 5 mm) and 13 mm tall throughout. The wide section is 123.3 x 44 mm. The narrow section on the left is 38.3 x 29.5 mm and sits in the 31 mm slot so the tray can't slide or twist.
+
+## Changes from v1 (after the test print)
+- Overall length cut from 185.3 to 161.6 mm (OVERALL_L = CALIPER_L + 5).
+- Height dropped from 20 to 13 mm, which is as low as the lip balm snap allows (the cradle top is 12.6 mm). The left section is now the same height as the rest.
+- The finger well is removed. The lip balm cradle now starts inside the narrow section, and the space left over at the far end is a small 27 mm bin.
+- The half-pencil lift nub is now on the inside of the key fob pocket's outer long wall. It protrudes 3.5 mm, leaving the pocket 37.3 mm wide at the nub, so the 33 mm fob still fits. The finger scoop is removed.
 
 ## Measurements
-Read from the photos:
-- Narrow slot on the left: 31.0 mm across and 39.8 mm along (caliper readings).
-- Main floor length ~150 mm, from the mouth of the narrow slot to where the tape bends over the far edge.
-
-Inferred / assumed (check these first):
-- Main floor width: not measured. The body is 44 mm wide, the minimum for the 40 mm fob pocket plus walls (BODY_W).
-- The narrow slot is at the same floor level as the main strip, and flush with the drive-mode-panel side (TONGUE_OFFSET).
-- Lip balm: Burt's Bees tube 15.3 x 68 mm. Fob: 55 x 33 mm.
+- Narrow slot: 31.0 x 39.8 mm (calipers). The narrow section is flush with the drive-mode-panel side, which fitted in v1.
+- Strip length: 156.6 mm (calipers). The user asked for the tray to be 5 mm longer than this.
+- Width: 44 mm, which fitted in v1.
+- Lip balm: Burt's Bees tube, 15.3 x 68 mm. Fob: 55 x 33 mm.
 
 ## Layout (left to right, drive-mode panel side at the top)
-- Locating tongue, hollow, 0.75 mm clearance per side in the 31 mm slot (CLEAR_SLOT).
-- 12.8 mm finger well with a half-pencil (half-hexagon) lift ridge on the cradle end, so you can hook a finger and lift the tongue end out.
-- One snap-in lip balm cradle lying lengthways: 13.8 mm opening over a 15.7 mm channel, closed ends, 22 mm grip notch in the middle.
-- Key fob pocket 58 x 40.8 mm with straight sides and a finger scoop on the outer wall.
+- Small bin in the narrow section.
+- Snap-in lip balm cradle lying lengthways. It has a 13.8 mm opening over a 15.7 mm channel, closed ends, and a 22 mm grip notch.
+- Key fob pocket, 58 x 40.8 mm, with straight sides and the lift nub.
 
 ## Print (Bambu Lab)
 PLA or PETG (ASA for hot cars), 0.2 mm layers, 3 walls, 15% gyroid, no supports, flat side down.
 
 ## Tuning
-Edit the top of kona_front_organiser.py, run `python3 kona_front_organiser.py` (needs cadquery, numpy-stl), then `python3 render_front.py` for the pictures.
-- Tongue too tight or loose: CLEAR_SLOT. Tongue is not flush with the panel side: TONGUE_OFFSET.
-- Strip is wider than 44 mm: raise BODY_W (the fob pocket widens with it).
-- Body too long or short: FLOOR_L.
+Edit the top of kona_front_organiser.py, run `python3 kona_front_organiser.py` (needs cadquery and numpy-stl), then run `python3 render_front.py` to redraw the pictures.
+- Length: OVERALL_L. Narrow section fit: CLEAR_SLOT and TONGUE_OFFSET. Width: BODY_W.
+- Nub: RIDGE_D (size) and RIDGE_L (length).
