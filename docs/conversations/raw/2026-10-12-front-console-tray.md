@@ -72,3 +72,38 @@ Sounds good. Send the drawing and I'll redo the fob pocket from it. Everything e
 - It's 2 mm shorter overall (159.6 mm). I read "overall width" as the length, because the width is set by the fob pocket. Tell me if you meant the width and I'll take 2 mm off that instead.
 - The lip balm sits in a plain half-cylinder trough with straight sides and closed ends, so nothing curves over the top. It's pushed against the drive-mode panel side, which leaves about 22 mm of open floor beside it for your fingers.
 - For now the fob pocket floor tilts 6° down towards the right-hand end. Your drawing will replace that.
+
+---
+
+**Charlimit · 2026-10-16 04:58** (image: `front-v3-markup-taper.png`)
+
+(drawing only, no text)
+
+---
+
+**Claude · 2026-10-16 04:59**
+
+Got it: tapered ends (longer at top), U-shaped trough with a grip notch on both sides. Working on v4 now.
+
+---
+
+**Charlimit · 2026-10-16 04:59**
+
+It's not the floor that needs to tilt, but the sides need to taper. See photos of how it doesn't fit on the right
+
+---
+
+**Claude · 2026-10-16 05:00**
+
+Understood: the fob tilt is gone and the end walls taper in v4. Finishing the renders now.
+
+---
+
+**Claude · 2026-10-16 05:15**
+
+v4 is done and committed as front v4.
+
+- Both ends now taper 10°, so the tray is 159.6 mm long at the top and 155.0 mm at the floor. I took 10° from your drawing, so tell me if the ends need more or less lean.
+- The fob pocket floor is flat again.
+- The lip balm trough is a plain U with closed ends, and the grip notch now cuts through both sides.
+

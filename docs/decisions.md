@@ -20,3 +20,4 @@ One line per decision, in date order. The linked conversation record has the con
 | 2026-10-13 | Front tray v2: overall length = caliper 156.6 + 5 = 161.6 mm; 13 mm tall throughout (lowest the balm snap allows) | [front tray conversation](conversations/2026-10-12-front-console-tray.md) |
 | 2026-10-13 | Front tray: finger well removed; half-pencil lift nub on the inside of the fob pocket's outer wall | front tray conversation |
 | 2026-10-16 | Front tray v3: tab 27.5 mm, 159.6 mm long; balm in an open straight-sided half-cylinder trough (no snap) against the panel side; fob floor tilted 6° to the right end | [front tray conversation](conversations/2026-10-12-front-console-tray.md) |
+| 2026-10-16 | Front tray v4: both end faces taper 10° (longer at the top) instead of a tilted fob floor; grip notch through both trough walls | [front tray conversation](conversations/2026-10-12-front-console-tray.md) |

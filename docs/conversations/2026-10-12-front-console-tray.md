@@ -1,4 +1,4 @@
-# Conversation record – front console tray v1 to v3
+# Conversation record – front console tray v1 to v4
 
 | | |
 |---|---|
@@ -6,7 +6,7 @@
 | **Area** | front tray (the strip between the cupholders and the drive-mode panel) |
 | **Claude project** | "Kona 3d print organiser", thread "Front console organiser" (claude.ai, cloud session) |
 | **People** | Charlimit, Claude |
-| **Status** | v1 and v2 test printed. v3 delivered, not yet test printed. Fob pocket angle waiting on Charlimit's drawing |
+| **Status** | v1 and v2 test printed. v4 delivered, not yet test printed |
 | **Type** | Record (summary written by Claude, not a verbatim transcript). The visible messages are in [`raw/2026-10-12-front-console-tray.md`](raw/2026-10-12-front-console-tray.md) |
 
 ## Summary
@@ -24,6 +24,8 @@ On 2026-10-16 Charlimit test printed v2 (`reference/photos/front-v2-test-print-0
 
 v3: the narrow section is 27.5 mm (1.75 mm clearance per side), and the tray is 2 mm shorter overall (159.6 mm). "Width too long" was read as the length, since the width is set by the fob pocket and the cupholder side is open floor. The balm now sits in an open half-cylinder trough with straight sides and no snap, pushed against the drive-mode-panel side (forward in the car), with about 22 mm of open floor beside it for fingers. The fob pocket floor tilts 6° down towards the right-hand end. Claude posted a decision card offering a tilt towards the panel or a diagonal pocket instead.
 
+Charlimit then marked up the v3 top view (`reference/photos/front-v3-markup-taper.png`). They drew a U cross-section for the trough, scribbled over both trough walls at the grip notch, and drew a side view tapering at both ends. They added: "It's not the floor that needs to tilt, but the sides need to taper. See photos of how it doesn't fit on the right." v4 tapers both end faces 10° (top 159.6 mm, floor 155.0 mm), makes the fob floor flat again, and cuts the grip notch through both trough walls.
+
 ## Decisions
 
 | Date | Decision |
@@ -38,7 +40,9 @@ v3: the narrow section is 27.5 mm (1.75 mm clearance per side), and the tray is 
 | 2026-10-13 | Cradle runs into the narrow section to fit the shorter length; a small bin fills the rest. |
 | 2026-10-16 | Narrow section 27.5 mm (`CLEAR_SLOT` 1.75); overall 159.6 mm ("width too long" read as length). |
 | 2026-10-16 | Lip balm in an open half-cylinder trough with straight sides, no snap; against the panel side with open finger space beside it. |
-| 2026-10-16 | Fob pocket floor tilts 6° down towards the right end (`FOB_TILT_DEG`), pending Charlimit's pick on the card. |
+| 2026-10-16 | v3 placeholder: fob floor tilted 6°. Replaced in v4. |
+| 2026-10-16 | v4: both end faces taper 10° from vertical (top 159.6, floor 155.0); the angle is Claude's default, read from the drawing. |
+| 2026-10-16 | v4: grip notch through both trough walls; fob floor flat. |
 
 ## Deliverables and versions
 
@@ -47,10 +51,10 @@ v3: the narrow section is 27.5 mm (1.75 mm clearance per side), and the tray is 
 | front-v1 | 2026-10-12 04:26 | Script, render script, STL, 3MF, STEP, preview and dimensioned top view, README. The committed files are the originals |
 | front-v2 | 2026-10-13 05:58 | 161.6 mm long, 13 mm tall, no finger well, nub in the fob pocket |
 | front-v3 | 2026-10-16 05:05 | Tab 27.5 mm, 159.6 mm long, open balm trough with finger space, fob floor tilted |
+| front-v4 | 2026-10-16 05:15 | Ends taper 10°, two-sided grip notch, fob floor flat |
 
 ## Open questions
-- Which way the fob pocket should angle. Charlimit will send a drawing; v3 has a placeholder 6° tilt towards the right end.
-- Whether "overall width too long" meant the length (built) or the 44 mm width.
+- Whether 10° is the right taper, and whether "overall width too long" meant the length (built) or the 44 mm width.
 
 ## Follow-ups
-- Test print v3.
+- Test print v4.
