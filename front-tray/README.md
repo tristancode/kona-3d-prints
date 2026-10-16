@@ -1,6 +1,13 @@
-# Kona 2025 front console organiser (v4)
+# Kona 2025 front console organiser (v5)
 
-Tray for the strip of floor between the cupholders and the drive-mode panel. It is 159.6 mm long at the top, 155.0 mm at the floor (both ends taper 10°), and 13 mm tall throughout. The wide section is 121.3 x 44 mm. The narrow section on the left is 38.3 x 27.5 mm and sits in the 31 mm slot so the tray can't slide or twist.
+Tray for the strip of floor between the cupholders and the drive-mode panel, 13 mm tall throughout. It is 159.6 mm long at the top on the panel side and 157.3 mm at the floor (both ends taper 5°). The right end is angled in plan, 5 mm shorter on the cupholder side. The balm section is 27.5 mm wide (the narrow part that sits in the 31 mm slot now runs the whole length of the balm trough). Only the key fob pocket is the full 44 mm width.
+
+## Changes from v4 (from Charlimit's second markup)
+- The right end is angled in plan: full length on the panel side and 5 mm shorter on the cupholder side (RIGHT_END_SKEW).
+- The lip balm trough moved to the cupholder side, so there is 7 mm of finger space between it and the panel side.
+- The wide strip beside the trough is gone. The tray is only 27.5 mm wide from the left end to the fob pocket, which saves filament.
+- The end taper is reduced to 5° (END_TAPER_LEFT_DEG, END_TAPER_RIGHT_DEG).
+- The fob pocket is 64 mm long on the panel side and 59 mm on the cupholder side, so the 55 mm fob still fits after the angled end. The small bin shrinks to 19 mm to make room.
 
 ## Changes from v3 (from Charlimit's drawing)
 - Both end faces taper 10° from vertical, so the tray is 2.3 mm shorter at the floor at each end (END_TAPER_LEFT_DEG, END_TAPER_RIGHT_DEG). This is so it fits the sloped ends of the space.
@@ -28,8 +35,8 @@ Tray for the strip of floor between the cupholders and the drive-mode panel. It 
 
 ## Layout (left to right, drive-mode panel side at the top)
 - Small bin in the narrow section.
-- Lip balm trough lying lengthways against the panel side: 15.7 mm wide, half-cylinder bottom, straight sides, closed ends, and open finger space beside it.
-- Key fob pocket, 58 x 40.8 mm, with straight sides and the lift nub.
+- Lip balm trough lying lengthways against the cupholder side: 15.7 mm wide, half-cylinder bottom, straight sides, closed ends, a grip notch through both sides, and 7 mm of finger space on the panel side.
+- Key fob pocket, 64 / 59 x 40.8 mm (angled right end), with the lift nub on the cupholder-side wall.
 
 ## Print (Bambu Lab)
 PLA or PETG (ASA for hot cars), 0.2 mm layers, 3 walls, 15% gyroid, no supports, flat side down.
@@ -37,4 +44,4 @@ PLA or PETG (ASA for hot cars), 0.2 mm layers, 3 walls, 15% gyroid, no supports,
 ## Tuning
 Edit the top of kona_front_organiser.py, run `python3 kona_front_organiser.py` (needs cadquery and numpy-stl), then run `python3 render_front.py` to redraw the pictures.
 - Length: OVERALL_L. Narrow section fit: CLEAR_SLOT and TONGUE_OFFSET. Width: BODY_W.
-- Nub: RIDGE_D (size) and RIDGE_L (length). End taper: END_TAPER_LEFT_DEG / END_TAPER_RIGHT_DEG.
+- Nub: RIDGE_D (size) and RIDGE_L (length). End taper: END_TAPER_LEFT_DEG / END_TAPER_RIGHT_DEG. Right end angle: RIGHT_END_SKEW.
