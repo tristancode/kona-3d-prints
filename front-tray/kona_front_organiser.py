@@ -12,6 +12,9 @@ no finger well, lift nub on the key fob pocket wall.
 v3 (after the v2 test print): narrow section 2 mm narrower, overall 2 mm shorter, lip balm
 in an open half-cylinder trough with straight sides (no snap), moved towards the drive-mode
 panel with open finger space beside it, key fob pocket floor tilted down towards the right end.
+v4 (Charlimit's drawing on the v3 top view): both end faces taper so the tray is longer at the
+top than at the floor (side view a trapezoid), the fob floor is flat again, and the lip balm
+trough has the grip notch through both sides.
 Layout left to right: narrow section (sits in the 31 mm slot, small bin) -> lip balm trough
 (starts in the narrow section) -> key fob pocket.
 """
@@ -48,7 +51,11 @@ CRADLE_WALL = 1.6    # trough end walls and its finger-side wall
 GRIP_W = 22.0
 
 # ---- Key fob pocket floor tilt ----
-FOB_TILT_DEG = 6.0   # floor slopes down towards the right end (+X); 0 = flat
+FOB_TILT_DEG = 0.0   # v3 placeholder tilt removed in v4; the drawing asked for tapered ends instead
+
+# ---- End taper (side view): the end faces lean out so the top is longer than the floor ----
+END_TAPER_LEFT_DEG = 10.0    # narrow-section end, degrees from vertical
+END_TAPER_RIGHT_DEG = 10.0   # key fob end, degrees from vertical
 
 # ---- Half-pencil lift nub on the inner face of the fob pocket's outer long wall ----
 RIDGE_D = 7.0        # across the corners -> protrudes 3.5 mm (pocket stays 37.3 wide at the nub)
@@ -117,7 +124,7 @@ def build():
     chan = cq.Workplane("YZ").workplane(offset=x_ch0).center(cy, zc).circle(ch_r).extrude(ch_len)
     sides = box(x_ch0, x_ch1, cy - ch_r, cy + ch_r, zc, HEIGHT + 1)
     gx = (x_ch0 + x_ch1) / 2
-    grip = box(gx - GRIP_W / 2, gx + GRIP_W / 2, y_trough0 - 0.01, cy, zc, HEIGHT + 1)
+    grip = box(gx - GRIP_W / 2, gx + GRIP_W / 2, y_trough0 - 0.01, yt + 0.01, zc, HEIGHT + 1)  # both sides
     tray = tray.cut(chan).cut(sides).cut(grip)
     # Close off the small bin: carry the trough's left end wall across the narrow section
     tray = tray.union(box(x_cr0, x_ch0, ty0 + WALL_T - 0.01, y_trough0 + 0.01, FLOOR_T - 0.01, HEIGHT))
@@ -142,6 +149,20 @@ def build():
     nub = (cq.Workplane("YZ").workplane(offset=px - RIDGE_L / 2)
            .polyline(prof).close().extrude(RIDGE_L))
     tray = tray.union(nub)
+    # Tapered ends: cut the lower outside corner off each end along the slope, then add a
+    # sloped end wall back so the wall stays WALL_T thick.
+    for x_top, deg, sgn in ((xr, END_TAPER_RIGHT_DEG, 1), (xn, END_TAPER_LEFT_DEG, -1)):
+        if deg <= 0:
+            continue
+        d = HEIGHT * math.tan(math.radians(deg))          # how much shorter the floor is
+        t = WALL_T / math.cos(math.radians(deg))          # horizontal thickness of the sloped wall
+        xb = x_top - sgn * d                              # bottom edge of the end face
+        far = x_top + sgn * 5
+        cut = [(xb, -0.01), (far, -0.01), (far, HEIGHT + 0.01), (x_top, HEIGHT + 0.01)]
+        wall = [(xb - sgn * t, 0), (xb, 0), (x_top, HEIGHT), (x_top - sgn * t, HEIGHT)]
+        mk = lambda pts: (cq.Workplane("XZ").workplane(offset=-(yt + 1))
+                          .polyline(pts).close().extrude(BODY_W + 2))
+        tray = tray.cut(mk(cut)).union(mk(wall).intersect(envelope))
     return tray
 
 
@@ -186,3 +207,5 @@ if __name__ == "__main__":
     print(f"wide {BODY_L:.1f} x {BODY_W:.1f}, narrow {TONGUE_L:.1f} x {TONGUE_W:.1f}, height {HEIGHT}")
     print(f"fob pocket {POCKET_L} x {POCKET_W:.1f}, left bin {BIN_L:.1f}, trough y {y_trough0:.1f}..{cy + ch_r:.1f}")
     print(f"channel x {x_ch0:.1f}..{x_ch1:.1f} (narrow section ends at x=0)")
+    dl = HEIGHT * math.tan(math.radians(END_TAPER_LEFT_DEG)); dr = HEIGHT * math.tan(math.radians(END_TAPER_RIGHT_DEG))
+    print(f"length at top {OVERALL_L:.1f}, at floor {OVERALL_L - dl - dr:.1f}")

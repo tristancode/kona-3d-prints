@@ -7,6 +7,8 @@ from stl import mesh
 D = __import__("os").path.dirname(__import__("os").path.abspath(__file__)) + "/"
 sys.path.insert(0, D)
 import kona_front_organiser as k
+import math
+dl = k.HEIGHT * math.tan(math.radians(k.END_TAPER_LEFT_DEG)); dr = k.HEIGHT * math.tan(math.radians(k.END_TAPER_RIGHT_DEG))
 
 m = mesh.Mesh.from_file(D + "kona_front_organiser.stl")
 fig = plt.figure(figsize=(14, 5), dpi=130)
@@ -23,7 +25,7 @@ for i, (el, az) in enumerate(((35, -60), (60, 120))):
     c = (mn + mx) / 2; r = (mx - mn).max() / 2
     ax.set_xlim(mn[0], mx[0]); ax.set_ylim(mn[1], mx[1]); ax.set_zlim(mn[2], mx[2]); ax.set_box_aspect(mx - mn, zoom=0.95)
     ax.view_init(el, az); ax.set_axis_off()
-fig.suptitle(f"Kona front console organiser v3 ({k.OVERALL_L:.1f} long, {k.HEIGHT:g} tall)")
+fig.suptitle(f"Kona front console organiser v4 ({k.OVERALL_L:.1f} long, {k.HEIGHT:g} tall)")
 plt.tight_layout(); plt.savefig(D + "kona_front_organiser_preview.png"); plt.close()
 
 # ---- Dimensioned top view ----
@@ -58,16 +60,18 @@ rect(k.xn + k.WALL_T, k.x_cr0, nw0, nw1, fc="white", ec="k", lw=0.8)           #
 rect(k.x_ch0, k.x_ch1, k.cy - k.ch_r, k.cy + k.ch_r, fc="white", ec="k", lw=0.6)
 gx = (k.x_ch0 + k.x_ch1) / 2
 rect(gx - k.GRIP_W / 2, gx + k.GRIP_W / 2, k.y_trough0, k.cy - k.ch_r, fc="#eef4fa", ec="k", lw=0.5, ls=":")
+rect(gx - k.GRIP_W / 2, gx + k.GRIP_W / 2, k.cy + k.ch_r, k.yt, fc="#eef4fa", ec="k", lw=0.5, ls=":")
+ax.text(gx, k.yt + 1, f"grip notch {k.GRIP_W:g} both sides", ha="center", va="bottom", fontsize=7.5)
 r = k.RIDGE_D / 2
 px = k.x_pocket0 + k.POCKET_L / 2
 rect(px - k.RIDGE_L / 2, px + k.RIDGE_L / 2, iw0, iw0 + r, fc="#7a9cc6", ec="k", lw=0.6)
-ax.text(px, 3, f"KEY FOB\n58 x 40.8\n(fob 55 x 33)\nfloor tilts {k.FOB_TILT_DEG:g}° down to the right", ha="center", va="center", fontsize=9)
+ax.text(px, 3, f"KEY FOB\n58 x 40.8\n(fob 55 x 33)", ha="center", va="center", fontsize=9)
 ax.text(px, iw0 + r + 1, "lift nub", ha="center", va="bottom", fontsize=7.5)
 ax.text(gx, k.cy, f"LIP BALM trough {k.ch_d:.1f} wide, straight sides, closed ends", ha="center", va="center", fontsize=8)
 ax.text(gx, (iw0 + k.y_trough0) / 2, f"finger space {k.y_trough0 - iw0:.1f}", ha="center", va="center", fontsize=8)
 dim((gx + 25, iw0), (gx + 25, k.y_trough0), 3, f"{k.y_trough0 - iw0:.1f}", vertical=True)
 ax.text((k.xn + k.x_cr0) / 2, (k.ty0 + k.ty1) / 2, "small\nbin", ha="center", va="center", fontsize=8)
-dim((k.xn, k.yb), (k.xr, k.yb), -12, f"overall {k.OVERALL_L:.1f}  (caliper 156.6 + 5 - 2)")
+dim((k.xn, k.yb), (k.xr, k.yb), -12, f"overall {k.OVERALL_L:.1f} at the top, {k.OVERALL_L - dl - dr:.1f} at the floor")
 dim((k.xl, k.yb), (k.xr, k.yb), -5, f"wide section {k.BODY_L:.1f}")
 dim((k.xn, k.yt), (k.xl, k.yt), 13, f"narrow section {k.TONGUE_L:.1f}  (slot 39.8)")
 dim((k.xn + k.WALL_T, k.yt), (k.x_cr0, k.yt), 6, f"bin {k.BIN_L:.1f}")
@@ -76,7 +80,16 @@ dim((k.x_pocket0, k.yt), (k.xr - k.WALL_T, k.yt), 6, f"pocket {k.POCKET_L:.1f}")
 dim((k.xr, k.yb), (k.xr, k.yt), 7, f"width {k.BODY_W:.1f}", vertical=True)
 dim((k.xn, k.ty0), (k.xn, k.ty1), -6, f"{k.TONGUE_W:.1f} (slot 31.0, v2 was 29.5)", vertical=True)
 dim((k.x_pocket0 + 4, iw0), (k.x_pocket0 + 4, iw1), 5, f"{k.POCKET_W:.1f}", vertical=True)
-ax.text((k.xn + k.xr) / 2, k.yt + 24, f"TOP VIEW v3  (drive-mode panel side at top)   all mm, height {k.HEIGHT:g} throughout, walls 1.6",
+ax.text((k.xn + k.xr) / 2, k.yt + 24, f"TOP VIEW v4  (drive-mode panel side at top)   all mm, height {k.HEIGHT:g} throughout, walls 1.6",
         ha="center", fontsize=10, weight="bold")
-ax.set_aspect("equal"); ax.set_xlim(k.xn - 22, k.xr + 22); ax.set_ylim(k.yb - 22, k.yt + 29)
+# Side view under the top view, showing the tapered ends
+import math as _m
+ys = k.yb - 34
+pts = [(k.xn + dl, ys), (k.xr - dr, ys), (k.xr, ys + k.HEIGHT), (k.xn, ys + k.HEIGHT)]
+ax.add_patch(matplotlib.patches.Polygon(pts, closed=True, fc="#d6e4f2", ec="k", lw=1.2))
+ax.text((k.xn + k.xr) / 2, ys + k.HEIGHT / 2, f"SIDE VIEW  height {k.HEIGHT:g}", ha="center", va="center", fontsize=8.5)
+ax.text(k.xn - 2, ys + 2, f"{k.END_TAPER_LEFT_DEG:g}° taper\n{dl:.1f} mm shorter", ha="right", va="center", fontsize=7.5)
+ax.text(k.xr + 2, ys + 2, f"{k.END_TAPER_RIGHT_DEG:g}° taper\n{dr:.1f} mm shorter", ha="left", va="center", fontsize=7.5)
+dim((k.xn + dl, ys), (k.xr - dr, ys), -4, f"floor {k.OVERALL_L - dl - dr:.1f}")
+ax.set_aspect("equal"); ax.set_xlim(k.xn - 22, k.xr + 22); ax.set_ylim(k.yb - 46, k.yt + 29)
 ax.axis("off"); plt.tight_layout(); plt.savefig(D + "kona_front_organiser_dimensions.png"); plt.close()

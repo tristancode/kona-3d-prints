@@ -1,6 +1,11 @@
-# Kona 2025 front console organiser (v3)
+# Kona 2025 front console organiser (v4)
 
-Tray for the strip of floor between the cupholders and the drive-mode panel. It is 159.6 mm long overall and 13 mm tall throughout. The wide section is 121.3 x 44 mm. The narrow section on the left is 38.3 x 27.5 mm and sits in the 31 mm slot so the tray can't slide or twist.
+Tray for the strip of floor between the cupholders and the drive-mode panel. It is 159.6 mm long at the top, 155.0 mm at the floor (both ends taper 10°), and 13 mm tall throughout. The wide section is 121.3 x 44 mm. The narrow section on the left is 38.3 x 27.5 mm and sits in the 31 mm slot so the tray can't slide or twist.
+
+## Changes from v3 (from Charlimit's drawing)
+- Both end faces taper 10° from vertical, so the tray is 2.3 mm shorter at the floor at each end (END_TAPER_LEFT_DEG, END_TAPER_RIGHT_DEG). This is so it fits the sloped ends of the space.
+- The key fob floor is flat again (FOB_TILT_DEG = 0).
+- The grip notch now cuts through both sides of the lip balm trough, including the panel-side wall.
 
 ## Changes from v2 (after the second test print)
 - The narrow section is 2 mm narrower: 27.5 mm, with 1.75 mm clearance per side in the 31 mm slot (CLEAR_SLOT).
@@ -24,7 +29,7 @@ Tray for the strip of floor between the cupholders and the drive-mode panel. It 
 ## Layout (left to right, drive-mode panel side at the top)
 - Small bin in the narrow section.
 - Lip balm trough lying lengthways against the panel side: 15.7 mm wide, half-cylinder bottom, straight sides, closed ends, and open finger space beside it.
-- Key fob pocket, 58 x 40.8 mm, with straight sides, the lift nub, and a floor tilted towards the right end.
+- Key fob pocket, 58 x 40.8 mm, with straight sides and the lift nub.
 
 ## Print (Bambu Lab)
 PLA or PETG (ASA for hot cars), 0.2 mm layers, 3 walls, 15% gyroid, no supports, flat side down.
@@ -32,4 +37,4 @@ PLA or PETG (ASA for hot cars), 0.2 mm layers, 3 walls, 15% gyroid, no supports,
 ## Tuning
 Edit the top of kona_front_organiser.py, run `python3 kona_front_organiser.py` (needs cadquery and numpy-stl), then run `python3 render_front.py` to redraw the pictures.
 - Length: OVERALL_L. Narrow section fit: CLEAR_SLOT and TONGUE_OFFSET. Width: BODY_W.
-- Nub: RIDGE_D (size) and RIDGE_L (length). Fob floor tilt: FOB_TILT_DEG.
+- Nub: RIDGE_D (size) and RIDGE_L (length). End taper: END_TAPER_LEFT_DEG / END_TAPER_RIGHT_DEG.
