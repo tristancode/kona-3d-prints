@@ -50,3 +50,20 @@ v2 is ready. It's 161.6 mm long (your 156.6 mm plus 5) and 13 mm tall all the wa
 
 It's committed to kona-3d-prints as front v2.
 
+---
+
+**Charlimit · 2026-10-16 04:43** (photos: `front-v2-test-print-01.jpg` to `front-v2-test-print-04.jpg`)
+
+The front one needs rework, the tab on the left is too wide by about 2mm. The overall width is too long by around 2mm i think. The key fob container needs to angle to the right. The lip balm section needs to move forward to give more finder space, the sides also need to be straight, at the moment the curve around at the top so the lip balm doesn't fit in, they should only be a half cylinder, no more.
+
+---
+
+**Claude · 2026-10-16 05:05**
+
+v3 is ready and committed as front v3.
+
+- The left tab is 2 mm narrower (27.5 mm).
+- It's 2 mm shorter overall (159.6 mm). I read "overall width" as the length, because the width is set by the fob pocket. Tell me if you meant the width and I'll take 2 mm off that instead.
+- The lip balm sits in a plain half-cylinder trough with straight sides and closed ends, so nothing curves over the top. It's pushed against the drive-mode panel side, which leaves about 22 mm of open floor beside it for your fingers.
+- The fob pocket floor now tilts 6° down towards the right-hand end. If you meant a different angle, pick it on the card above.
+
