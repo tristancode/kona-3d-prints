@@ -1,4 +1,4 @@
-# Conversation record – front console tray v1 to v4
+# Conversation record – front console tray v1 to v5
 
 | | |
 |---|---|
@@ -6,7 +6,7 @@
 | **Area** | front tray (the strip between the cupholders and the drive-mode panel) |
 | **Claude project** | "Kona 3d print organiser", thread "Front console organiser" (claude.ai, cloud session) |
 | **People** | Charlimit, Claude |
-| **Status** | v1 and v2 test printed. v4 delivered, not yet test printed |
+| **Status** | v1 and v2 test printed. v5 delivered, not yet test printed |
 | **Type** | Record (summary written by Claude, not a verbatim transcript). The visible messages are in [`raw/2026-10-12-front-console-tray.md`](raw/2026-10-12-front-console-tray.md) |
 
 ## Summary
@@ -26,6 +26,8 @@ v3: the narrow section is 27.5 mm (1.75 mm clearance per side), and the tray is 
 
 Charlimit then marked up the v3 top view (`reference/photos/front-v3-markup-taper.png`). They drew a U cross-section for the trough, scribbled over both trough walls at the grip notch, and drew a side view tapering at both ends. They added: "It's not the floor that needs to tilt, but the sides need to taper. See photos of how it doesn't fit on the right." v4 tapers both end faces 10° (top 159.6 mm, floor 155.0 mm), makes the fob floor flat again, and cuts the grip notch through both trough walls.
 
+Charlimit marked up v4 (`reference/photos/front-v4-markup.png`): "Still wrong... Right hand side there is an angle on the right side, not straight. Move the lip balm down the page so there is finger space against the car, also remove the section below the lip balm, nothing will fit in it so wasted space/filament. Reduce the taper on the sides to 5 degrees." v5: the right end is angled in plan (5 mm shorter on the cupholder side, read from the red line), the balm trough is against the cupholder-side wall with 7 mm of finger space on the panel side, the tray is only 27.5 mm wide from the left end to the fob pocket, and the end tapers are 5°. The fob pocket grew to 64/59 mm so the 55 mm fob still fits; the bin shrank to 19 mm.
+
 ## Decisions
 
 | Date | Decision |
@@ -43,6 +45,8 @@ Charlimit then marked up the v3 top view (`reference/photos/front-v3-markup-tape
 | 2026-10-16 | v3 placeholder: fob floor tilted 6°. Replaced in v4. |
 | 2026-10-16 | v4: both end faces taper 10° from vertical (top 159.6, floor 155.0); the angle is Claude's default, read from the drawing. |
 | 2026-10-16 | v4: grip notch through both trough walls; fob floor flat. |
+| 2026-10-16 | v5: right end angled in plan, 5 mm shorter on the cupholder side (Claude's reading of the red line). |
+| 2026-10-16 | v5: balm trough against the cupholder side; finger space against the panel; no wide strip beside the trough; end taper 5°. |
 
 ## Deliverables and versions
 
@@ -52,9 +56,10 @@ Charlimit then marked up the v3 top view (`reference/photos/front-v3-markup-tape
 | front-v2 | 2026-10-13 05:58 | 161.6 mm long, 13 mm tall, no finger well, nub in the fob pocket |
 | front-v3 | 2026-10-16 05:05 | Tab 27.5 mm, 159.6 mm long, open balm trough with finger space, fob floor tilted |
 | front-v4 | 2026-10-16 05:15 | Ends taper 10°, two-sided grip notch, fob floor flat |
+| front-v5 | 2026-10-16 05:30 | Angled right end, balm on the cupholder side, narrow body beside the balm, 5° taper |
 
 ## Open questions
-- Whether 10° is the right taper, and whether "overall width too long" meant the length (built) or the 44 mm width.
+- Whether 5 mm is the right amount of angle on the right end.
 
 ## Follow-ups
-- Test print v4.
+- Test print v5.

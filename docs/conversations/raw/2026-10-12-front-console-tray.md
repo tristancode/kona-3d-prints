@@ -107,3 +107,27 @@ v4 is done and committed as front v4.
 - The fob pocket floor is flat again.
 - The lip balm trough is a plain U with closed ends, and the grip notch now cuts through both sides.
 
+---
+
+**Charlimit · 2026-10-16 05:07** (image: `front-v4-markup.png`)
+
+Still wrong, corrections in red on the screen shot. Right hand side there is an angle on the right side, not straight. Move the lip balm down the page so there is finger space against the car, also remove the section below the lip balm, nothing will fit in it so wasted space/filament. Reduce the taper on the sides to 5 degrees
+
+---
+
+**Claude · 2026-10-16 05:08**
+
+Got it: angled right end, lip balm moved to the cupholder side, section below it removed, 5° tapers. Starting v5.
+
+---
+
+**Claude · 2026-10-16 05:30**
+
+v5 is done and committed as front v5.
+
+- The right end is angled, full length on the panel side and 5 mm shorter on the cupholder side. I read the 5 mm off your red line, so say if it needs more or less.
+- The lip balm is against the cupholder side now, with 7 mm of finger space between it and the panel.
+- The strip below the lip balm is gone. The tray is only 27.5 mm wide until the fob pocket.
+- Both ends taper 5°.
+- To keep the 55 mm fob fitting with the angled end, the pocket is 64 mm on the panel side and 59 mm on the cupholder side. The small bin on the left shrank to 19 mm to make room.
+

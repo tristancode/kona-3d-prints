@@ -21,3 +21,4 @@ One line per decision, in date order. The linked conversation record has the con
 | 2026-10-13 | Front tray: finger well removed; half-pencil lift nub on the inside of the fob pocket's outer wall | front tray conversation |
 | 2026-10-16 | Front tray v3: tab 27.5 mm, 159.6 mm long; balm in an open straight-sided half-cylinder trough (no snap) against the panel side; fob floor tilted 6° to the right end | [front tray conversation](conversations/2026-10-12-front-console-tray.md) |
 | 2026-10-16 | Front tray v4: both end faces taper 10° (longer at the top) instead of a tilted fob floor; grip notch through both trough walls | [front tray conversation](conversations/2026-10-12-front-console-tray.md) |
+| 2026-10-16 | Front tray v5: right end angled in plan (5 mm), balm on the cupholder side with finger space at the panel, no wide strip beside the balm, end taper 5° | [front tray conversation](conversations/2026-10-12-front-console-tray.md) |
