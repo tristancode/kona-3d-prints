@@ -19,6 +19,8 @@ v5 (Charlimit's markup of the v4 top view): the right end is angled in plan (ful
 panel side, RIGHT_END_SKEW shorter on the cupholder side), the lip balm trough moves to the
 cupholder side so the finger space is against the car's panel, the wide section is cut back so
 the strip beside the trough is gone (only the fob pocket is full width), end tapers 5 degrees.
+v6: the finger space beside the trough is gone; the trough's side walls are the outer walls
+joining the bin to the fob pocket, and the trough's right end wall is the fob pocket's left wall.
 Layout left to right: narrow section (sits in the 31 mm slot, small bin) -> lip balm trough
 (starts in the narrow section) -> key fob pocket.
 """
@@ -80,12 +82,12 @@ ty1 = yt + TONGUE_OFFSET                  # narrow section flush with the drive-
 ty0 = ty1 - TONGUE_W
 cy = ty0 + WALL_T + ch_r                  # trough against the cupholder-side wall
 y_trough1 = cy + ch_r + CRADLE_WALL       # panel-side face of the trough
-FINGER_W = (ty1 - WALL_T) - y_trough1     # finger space between the trough and the panel side
+BALM_W = y_trough1 - ty0                  # width of the balm section
 
 # Interior stations along X (right to left)
 x_pocket0 = xr - WALL_T - POCKET_L        # left edge of fob pocket
 x_div = x_pocket0 - WALL_T                # wall between the pocket and the balm section
-x_ch1 = x_div - CRADLE_WALL               # right end of balm channel
+x_ch1 = x_div                             # channel ends at the fob pocket's wall (one shared wall)
 x_ch0 = x_ch1 - ch_len                    # left end of balm channel
 x_cr0 = x_ch0 - CRADLE_WALL               # left face of the trough block
 BIN_L = x_cr0 - (xn + WALL_T)             # small bin at the far left
@@ -101,11 +103,19 @@ def rbox(x0, x1, y0, y1, z0, z1, r):
     return box(x0, x1, y0, y1, z0, z1).edges("|Z").fillet(r)
 
 
-def footprint(inset, z0, z1):
-    r = max(CORNER_R - inset, 0.6)
-    wide = rbox(x_div + inset, xr + 10, yb + inset, yt - inset, z0, z1, r)   # right end cut later
-    narrow = rbox(xn + inset, x_div + CORNER_R + 2, ty0 + inset, ty1 - inset, z0, z1, r)
-    return wide.union(narrow)
+def envelope_solid():
+    r = CORNER_R
+    wide = rbox(x_div, xr + 10, yb, yt, 0, HEIGHT, r)                          # fob pocket; right end cut later
+    binpart = rbox(xn, x_ch0, ty0, ty1, 0, HEIGHT, r)                          # small bin, sits in the slot
+    trough = box(x_cr0, x_div + r + 1, ty0, y_trough1, 0, HEIGHT)              # balm trough, walls are outer walls
+    return wide.union(binpart).union(trough)
+
+
+def cavity_solid():
+    r = CORNER_R - WALL_T + 0.4
+    pocket = rbox(x_pocket0, xr + 10, yb + WALL_T, yt - WALL_T, FLOOR_T, HEIGHT + 1, r)
+    binc = rbox(xn + WALL_T, x_cr0, ty0 + WALL_T, ty1 - WALL_T, FLOOR_T, HEIGHT + 1, r)
+    return pocket.union(binc)
 
 
 def end_line(y, z, side):
@@ -128,23 +138,16 @@ def end_solid(side, inset0, inset1):
 
 
 def build():
-    envelope = footprint(0, 0, HEIGHT)
-    cavity = footprint(WALL_T, FLOOR_T, HEIGHT + 1)
-    tray = envelope.cut(cavity)
-    # Wall between the balm section and the fob pocket, across the narrow part
-    tray = tray.union(box(x_div, x_pocket0, ty0 + WALL_T - 0.01, ty1 - WALL_T + 0.01, FLOOR_T - 0.01, HEIGHT))
+    envelope = envelope_solid()
+    tray = envelope.cut(cavity_solid())
 
-    # Lip balm trough against the cupholder-side wall: half-cylinder bottom, straight sides,
-    # closed ends. Open floor between it and the panel side for fingers.
-    block = box(x_cr0, x_div + 0.01, ty0, y_trough1, FLOOR_T - 0.01, HEIGHT).intersect(envelope)
-    tray = tray.union(block)
+    # Lip balm trough: half-cylinder bottom with straight sides, closed ends, cut into the
+    # solid strip so its side walls are the tray's outer walls.
     chan = cq.Workplane("YZ").workplane(offset=x_ch0).center(cy, zc).circle(ch_r).extrude(ch_len)
     sides = box(x_ch0, x_ch1, cy - ch_r, cy + ch_r, zc, HEIGHT + 1)
     gx = (x_ch0 + x_ch1) / 2
-    grip = box(gx - GRIP_W / 2, gx + GRIP_W / 2, ty0 - 1, y_trough1 + 0.01, zc, HEIGHT + 1)  # both sides
+    grip = box(gx - GRIP_W / 2, gx + GRIP_W / 2, ty0 - 1, y_trough1 + 1, zc, HEIGHT + 1)  # both sides
     tray = tray.cut(chan).cut(sides).cut(grip)
-    # Close off the small bin across the finger space
-    tray = tray.union(box(x_cr0, x_ch0, y_trough1 - 0.01, ty1 - WALL_T + 0.01, FLOOR_T - 0.01, HEIGHT))
 
     # Half-pencil (half-hexagon) lift nub on the inside of the fob pocket's cupholder-side wall.
     # Underside is a 60 deg slope, so no supports.
@@ -206,7 +209,7 @@ if __name__ == "__main__":
     bb = t.val().BoundingBox()
     print(f"size {bb.xlen:.1f} x {bb.ylen:.1f} x {bb.zlen:.1f} mm, volume {t.val().Volume()/1000:.1f} cm3")
     print(f"narrow {xr - xn - (xr - x_div):.1f} x {TONGUE_W:.1f}, wide {xr - x_div:.1f} x {BODY_W:.1f}, height {HEIGHT}")
-    print(f"fob pocket {POCKET_L} (panel side) / {POCKET_L - RIGHT_END_SKEW} (cupholder side) x {POCKET_W:.1f}, left bin {BIN_L:.1f}, finger space {FINGER_W:.1f}")
+    print(f"fob pocket {POCKET_L} (panel side) / {POCKET_L - RIGHT_END_SKEW} (cupholder side) x {POCKET_W:.1f}, left bin {BIN_L:.1f}, balm section {BALM_W:.1f} wide")
     print(f"channel x {x_ch0:.1f}..{x_ch1:.1f} (narrow section ends at x=0)")
     dl = HEIGHT * math.tan(math.radians(END_TAPER_LEFT_DEG)); dr = HEIGHT * math.tan(math.radians(END_TAPER_RIGHT_DEG))
     print(f"length at top {OVERALL_L:.1f}, at floor {OVERALL_L - dl - dr:.1f}")

@@ -1,6 +1,10 @@
-# Kona 2025 front console organiser (v5)
+# Kona 2025 front console organiser (v6)
 
-Tray for the strip of floor between the cupholders and the drive-mode panel, 13 mm tall throughout. It is 159.6 mm long at the top on the panel side and 157.3 mm at the floor (both ends taper 5°). The right end is angled in plan, 5 mm shorter on the cupholder side. The balm section is 27.5 mm wide (the narrow part that sits in the 31 mm slot now runs the whole length of the balm trough). Only the key fob pocket is the full 44 mm width.
+Tray for the strip of floor between the cupholders and the drive-mode panel, 13 mm tall throughout. It is 159.6 mm long at the top on the panel side and 157.3 mm at the floor (both ends taper 5°). The right end is angled in plan, 5 mm shorter on the cupholder side. The small bin at the left is 27.5 mm wide and sits in the 31 mm slot. The lip balm section is only 18.9 mm wide, and its trough walls are the outer walls joining the bin to the fob pocket. Only the key fob pocket is the full 44 mm width.
+
+## Changes from v5
+- The finger space beside the trough is gone. The trough's side walls are now the tray's outer walls, so the balm section is 18.9 mm wide and there is a gap to the panel instead.
+- The trough's right end wall and the fob pocket's left wall are now one shared 1.6 mm wall, so it prints as one continuous wall. The bin grows to 20.6 mm.
 
 ## Changes from v4 (from Charlimit's second markup)
 - The right end is angled in plan: full length on the panel side and 5 mm shorter on the cupholder side (RIGHT_END_SKEW).
@@ -35,7 +39,7 @@ Tray for the strip of floor between the cupholders and the drive-mode panel, 13 
 
 ## Layout (left to right, drive-mode panel side at the top)
 - Small bin in the narrow section.
-- Lip balm trough lying lengthways against the cupholder side: 15.7 mm wide, half-cylinder bottom, straight sides, closed ends, a grip notch through both sides, and 7 mm of finger space on the panel side.
+- Lip balm trough lying lengthways against the cupholder side: 15.7 mm wide, half-cylinder bottom, straight sides, closed ends, and a grip notch through both sides. Its side walls are the outer walls.
 - Key fob pocket, 64 / 59 x 40.8 mm (angled right end), with the lift nub on the cupholder-side wall.
 
 ## Print (Bambu Lab)
