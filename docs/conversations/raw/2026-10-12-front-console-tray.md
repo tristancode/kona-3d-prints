@@ -153,3 +153,100 @@ v6 is done and committed as front v6.
 - The trough's right end and the fob pocket's left side are now one shared wall, so it prints as one continuous piece. That freed 1.6 mm, so the small bin grew to 20.6 mm.
 - Everything else is the same as v5.
 
+
+---
+
+**Charlimit · 2026-10-16 05:19**
+
+How much Pla filament?
+
+---
+
+**Claude · 2026-10-16 05:20**
+
+About 16 to 19 g of PLA, or roughly 5.5 to 6.5 m of 1.75 mm filament.
+
+That comes from the model's volume of 15.1 cm³. The walls and floor are thin enough to print almost solid, so 19 g is the upper limit at 100% fill. The infill only saves a little, around the thicker trough walls. Bambu Studio will give you the exact figure once you slice it.
+
+---
+
+**Charlimit · 2026-10-16 06:28**
+
+push to the printer. In one of the other messages you said there was a key that could be used to print directly, can we do that?
+
+---
+
+**Claude · 2026-10-16 06:29**
+
+You want v6 sent straight to your printer. I'll find the earlier message about the key first.
+
+---
+
+**Claude · 2026-10-16 06:29**
+
+Yes, we can. The "key" is the printer's LAN access code. I can't reach your printer from here, so the job has to run on your computer.
+
+I've posted a card asking to work in your 3d-prints folder on Nick-DellXPS15. Once you allow it, that session will slice v6 with PLA, check the camera to make sure the plate is clear, and send the job over LAN. It will ask you for the printer's IP address and access code, which are on the printer screen under the network or LAN settings. It will also check with you once more right before printing starts.
+
+---
+
+**Charlimit · 2026-10-16 06:30**
+
+details for the printer should be in bambu studio
+
+---
+
+**Claude · 2026-10-16 06:31**
+
+Thanks. The session on your computer has your message too, and it will take the IP address and access code from Bambu Studio instead of asking you.
+
+---
+
+**Charlimit · 2026-10-16 06:33**
+
+how much filament will be left after this print?
+
+---
+
+**Claude · 2026-10-16 06:33**
+
+I can't see your spool from here. The session on your computer is asking the printer how much is left, if it has an AMS that tracks it. I'll take the roughly 17 g this print uses off that figure and let you know.
+
+---
+
+**Claude · 2026-10-16 06:34**
+
+Two things are needed from you before it prints.
+
+1. **Clear the plate.** The camera shows a light-coloured object near the back of the bed, probably the enclosure top shell from your last print. Take it off, check the textured PEI plate is seated, and reply "plate clear".
+2. **Start the print.** Your P1S won't accept a print start from my tools unless Developer Mode is on, so the quickest way is to open `C:\Users\Tristan\code\3d-prints\sliced\kona_front_organiser_v6.gcode.3mf` in Bambu Studio and press Print. If you'd rather I start it, turn on LAN Only + Developer Mode on the printer. That disconnects Bambu Handy and the cloud.
+
+It's sliced for the P1S with black PLA on the external spool: about 29 minutes and 17.3 g. I can't tell you how much filament will be left, because the external spool doesn't report what's on it. If you know the spool's weight, take 17.3 g off that.
+
+---
+
+**Charlimit · 2026-10-16 06:35**
+
+previous conversation worked out how much was left, 888+72 was the last used from memory. I thought you would use the key to print directly, emulating the bambu software
+
+---
+
+**Claude · 2026-10-16 06:35** (edited)
+
+**Filament:** if 888 g was left before your last 72 g print, you'll have about 799 g after this one. If 888 g and 72 g were both used from a 1 kg spool, only about 23 g is left. That's still enough for this 17.3 g print, but only just.
+
+**Printing directly:** I did try that with the access code. Your P1S's firmware rejects a print start from anything that isn't Bambu's own app (error 84033543), even with the correct code. The only ways around it are:
+- Press Print on the sliced file in Bambu Studio. This is the quickest.
+- Turn on LAN Only + Developer Mode on the printer so I can start it. You'd also need to allow file uploads in Claude's permission settings on your PC, because uploading the file to the printer was blocked there.
+
+**Plate:** a fresh camera snapshot still shows the light-coloured object near the back of the bed, so take it off before printing.
+
+---
+
+**Claude · 2026-10-16 06:46**
+
+v6 is printing now, with about 29 minutes to go. Thanks for clearing the plate and pressing Print.
+
+If 888 g was on the spool before your last 72 g print, you'll have about 799 g left after this one. If 888 g was already the figure after that print, it'll be about 871 g.
+
+Send a photo once it's in the car and I'll make any fit tweaks.

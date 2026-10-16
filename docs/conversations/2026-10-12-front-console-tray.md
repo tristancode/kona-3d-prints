@@ -2,11 +2,11 @@
 
 | | |
 |---|---|
-| **Dates** | 2026-10-12, 15:20 to 15:27 Sydney time (04:20 to 04:27 UTC); 2026-10-13, 16:44 to 17:00 Sydney (05:44 to 06:00 UTC); 2026-10-16, 15:43 to 16:05 Sydney (04:43 to 05:05 UTC) |
+| **Dates** | 2026-10-12, 15:20 to 15:27 Sydney time (04:20 to 04:27 UTC); 2026-10-13, 16:44 to 17:00 Sydney (05:44 to 06:00 UTC); 2026-10-16, 15:43 to 17:46 Sydney (04:43 to 06:46 UTC) |
 | **Area** | front tray (the strip between the cupholders and the drive-mode panel) |
 | **Claude project** | "Kona 3d print organiser", thread "Front console organiser" (claude.ai, cloud session) |
 | **People** | Charlimit, Claude |
-| **Status** | v1 and v2 test printed. v6 delivered, not yet test printed |
+| **Status** | v1 and v2 test printed. v6 printing on 2026-10-16, fit not yet checked |
 | **Type** | Record (summary written by Claude, not a verbatim transcript). The visible messages are in [`raw/2026-10-12-front-console-tray.md`](raw/2026-10-12-front-console-tray.md) |
 
 ## Summary
@@ -30,6 +30,8 @@ Charlimit marked up v4 (`reference/photos/front-v4-markup.png`): "Still wrong...
 
 Charlimit then asked to remove the 7 mm finger space and use the lip balm walls to join the sections, and said the balm's right-hand wall looked separate from the fob pocket's left wall when it should be continuous so it prints correctly. v6 makes the trough's side walls the outer walls (balm section 18.9 mm wide) and gives the trough and fob pocket one shared wall.
 
+On 2026-10-16 Charlimit asked how much PLA v6 needs (Claude estimated 16 to 19 g from the 15.1 cm³ volume) and then asked Claude to send it straight to the printer using the LAN access code. Claude started a session on Charlimit's PC, which sliced v6 in Bambu Studio's engine (P1S 0.4 mm, Generic PLA, 0.2 mm layers, 3 walls, 15% gyroid, textured PEI at 60 °C: about 29 min and 17.3 g, `sliced\kona_front_organiser_v6.gcode.3mf` on the PC). The P1S rejected a third-party print start (error 84033543) because it isn't in LAN Only + Developer Mode, and Claude would not imitate Bambu's signed commands, so Charlimit cleared an old print off the plate and pressed Print in Bambu Studio. Filament left after the print: about 799 g if 888 g was on the spool before the last 72 g print, or about 871 g if 888 g was the figure after it. The access code was not stored or committed.
+
 ## Decisions
 
 | Date | Decision |
@@ -50,6 +52,7 @@ Charlimit then asked to remove the 7 mm finger space and use the lip balm walls 
 | 2026-10-16 | v5: right end angled in plan, 5 mm shorter on the cupholder side (Claude's reading of the red line). |
 | 2026-10-16 | v5: balm trough against the cupholder side; finger space against the panel; no wide strip beside the trough; end taper 5°. |
 | 2026-10-16 | v6: no finger space; trough side walls are the outer walls; one shared wall between the trough and the fob pocket. |
+| 2026-10-16 | Printing: slice on the PC, but start the print from Bambu Studio; no imitation of Bambu's signed commands, and the access code is never stored. |
 
 ## Deliverables and versions
 
@@ -66,4 +69,4 @@ Charlimit then asked to remove the 7 mm finger space and use the lip balm walls 
 - Whether 5 mm is the right amount of angle on the right end.
 
 ## Follow-ups
-- Test print v6.
+- Check v6's fit in the car (printed 2026-10-16).
