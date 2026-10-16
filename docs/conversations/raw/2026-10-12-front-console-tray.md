@@ -131,3 +131,25 @@ v5 is done and committed as front v5.
 - Both ends taper 5°.
 - To keep the 55 mm fob fitting with the angled end, the pocket is 64 mm on the panel side and 59 mm on the cupholder side. The small bin on the left shrank to 19 mm to make room.
 
+---
+
+**Charlimit · 2026-10-16 05:16**
+
+I think the "'finger space 7" can be removed, using the wall for the lip balm to join the sections. I also worry from the renders that the right hand side wall of the lip balm looks seperate from the left had wall of the key fob, they should be continuous so it prints correctly.
+
+---
+
+**Claude · 2026-10-16 05:17**
+
+Understood: drop the finger space so the balm trough walls are the outer walls, and share one wall with the fob pocket. Doing v6.
+
+---
+
+**Claude · 2026-10-16 05:25**
+
+v6 is done and committed as front v6.
+
+- The finger space is gone. The lip balm trough's walls are now the outer walls joining the bin to the fob pocket, so that section is 18.9 mm wide.
+- The trough's right end and the fob pocket's left side are now one shared wall, so it prints as one continuous piece. That freed 1.6 mm, so the small bin grew to 20.6 mm.
+- Everything else is the same as v5.
+
