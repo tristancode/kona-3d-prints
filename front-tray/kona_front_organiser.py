@@ -7,20 +7,23 @@ Coordinates (as seen in the user's photos, drive-mode panel at the top):
 X = along the strip (+X is right, towards the key fob end), Y = across (+Y towards the
 drive-mode panel), Z = up. All dimensions in mm. Print flat, open side up, no supports.
 
-v2 (after the v1 test print): overall length = caliper 156.6 + 5 mm, one height throughout
-(as low as the lip balm snap allows), no finger well, lift nub on the key fob pocket wall.
-Layout left to right: narrow section (sits in the 31 mm slot, small bin) -> snap-in lip balm
-cradle (starts in the narrow section) -> key fob pocket.
+v2 (after the v1 test print): overall length = caliper 156.6 + 5 mm, one height throughout,
+no finger well, lift nub on the key fob pocket wall.
+v3 (after the v2 test print): narrow section 2 mm narrower, overall 2 mm shorter, lip balm
+in an open half-cylinder trough with straight sides (no snap), moved towards the drive-mode
+panel with open finger space beside it, key fob pocket floor tilted down towards the right end.
+Layout left to right: narrow section (sits in the 31 mm slot, small bin) -> lip balm trough
+(starts in the narrow section) -> key fob pocket.
 """
 import math, os
 import cadquery as cq
 
 # ---- Space ----
 CALIPER_L = 156.6    # user's caliper reading along the strip (v1 test print)
-OVERALL_L = CALIPER_L + 5.0   # user: total length = caliper + 5 mm
+OVERALL_L = CALIPER_L + 5.0 - 2.0   # v2 asked caliper + 5; v3 test print was ~2 mm too long
 SLOT_W = 31.0        # narrow slot on the left, caliper (across)
 SLOT_L = 39.8        # narrow slot on the left, caliper (along)
-CLEAR_SLOT = 0.75    # gap per side of the narrow section in the slot (fitted fine in v1)
+CLEAR_SLOT = 1.75    # gap per side of the narrow section in the slot (v2 at 0.75 was ~2 mm too wide)
 CLEAR_END = 1.5
 TONGUE_OFFSET = 0.0  # shift the narrow section across (+ towards the drive-mode panel)
 
@@ -40,9 +43,12 @@ BALM_D = 15.3
 BALM_L = 68.0
 BALM_FIT = 0.4
 BALM_AXIAL = 0.6
-SNAP_GAP = 13.8
-CRADLE_WALL = 1.6
+TROUGH_WALL = 1.2    # wall between the trough and the panel-side outer wall
+CRADLE_WALL = 1.6    # trough end walls and its finger-side wall
 GRIP_W = 22.0
+
+# ---- Key fob pocket floor tilt ----
+FOB_TILT_DEG = 6.0   # floor slopes down towards the right end (+X); 0 = flat
 
 # ---- Half-pencil lift nub on the inner face of the fob pocket's outer long wall ----
 RIDGE_D = 7.0        # across the corners -> protrudes 3.5 mm (pocket stays 37.3 wide at the nub)
@@ -54,8 +60,8 @@ ch_d = BALM_D + BALM_FIT
 ch_r = ch_d / 2
 ch_len = BALM_L + BALM_AXIAL
 zc = FLOOR_T + ch_r
-cradle_top = zc + math.sqrt(ch_r**2 - (SNAP_GAP / 2) ** 2)
-HEIGHT = math.ceil(cradle_top * 2) / 2   # whole tray at the cradle height (13.0)
+HEIGHT = 13.0                             # whole tray height (v2: as low as the balm allows)
+cradle_top = HEIGHT
 
 TONGUE_W = SLOT_W - 2 * CLEAR_SLOT
 TONGUE_L = SLOT_L - CLEAR_END             # narrow section length (same as v1)
@@ -65,7 +71,8 @@ xn = xl - TONGUE_L                        # far left end of the narrow section
 yb, yt = -BODY_W / 2, BODY_W / 2
 ty1 = yt + TONGUE_OFFSET                  # narrow section flush with the drive-mode-panel side
 ty0 = ty1 - TONGUE_W
-cy = (ty0 + ty1) / 2                      # cradle centred on the narrow section so it can run into it
+cy = yt - WALL_T - TROUGH_WALL - ch_r      # trough pushed towards the drive-mode panel
+y_trough0 = cy - ch_r - CRADLE_WALL       # finger-side face of the trough
 
 # Interior stations along X (right to left)
 x_pocket0 = xr - WALL_T - POCKET_L        # left edge of fob pocket
@@ -103,14 +110,26 @@ def build():
     # Divider between the cradle and the fob pocket
     tray = tray.union(box(x_div, x_pocket0, yb + WALL_T - 0.01, yt - WALL_T + 0.01, FLOOR_T - 0.01, HEIGHT))
 
-    # Lip balm cradle block filling the inside width wherever it runs (wide and narrow parts)
-    block = box(x_cr0, x_div + 0.01, yb, yt, FLOOR_T - 0.01, cradle_top).intersect(envelope)
+    # Lip balm trough: half-cylinder bottom with straight sides up to the top, closed ends.
+    # Only the panel side is filled; the rest of the width is open floor for fingers.
+    block = box(x_cr0, x_div + 0.01, y_trough0, yt, FLOOR_T - 0.01, HEIGHT).intersect(envelope)
     tray = tray.union(block)
     chan = cq.Workplane("YZ").workplane(offset=x_ch0).center(cy, zc).circle(ch_r).extrude(ch_len)
-    slot = box(x_ch0, x_ch1, cy - SNAP_GAP / 2, cy + SNAP_GAP / 2, zc, HEIGHT + 1)
+    sides = box(x_ch0, x_ch1, cy - ch_r, cy + ch_r, zc, HEIGHT + 1)
     gx = (x_ch0 + x_ch1) / 2
-    grip = box(gx - GRIP_W / 2, gx + GRIP_W / 2, yb + WALL_T, yt - WALL_T, zc, HEIGHT + 1)
-    tray = tray.cut(chan).cut(slot).cut(grip)
+    grip = box(gx - GRIP_W / 2, gx + GRIP_W / 2, y_trough0 - 0.01, cy, zc, HEIGHT + 1)
+    tray = tray.cut(chan).cut(sides).cut(grip)
+    # Close off the small bin: carry the trough's left end wall across the narrow section
+    tray = tray.union(box(x_cr0, x_ch0, ty0 + WALL_T - 0.01, y_trough0 + 0.01, FLOOR_T - 0.01, HEIGHT))
+
+    # Key fob pocket floor: wedge, high at the divider, low at the right end wall
+    if FOB_TILT_DEG > 0:
+        rise = POCKET_L * math.tan(math.radians(FOB_TILT_DEG))
+        wedge = (cq.Workplane("XZ").workplane(offset=-(yt - WALL_T + 0.01))
+                 .polyline([(x_pocket0 - 0.01, FLOOR_T - 0.01), (x_pocket0 - 0.01, FLOOR_T + rise),
+                            (xr - WALL_T + 0.01, FLOOR_T - 0.01)]).close()
+                 .extrude(POCKET_W + 0.02))
+        tray = tray.union(wedge)
 
     # Half-pencil (half-hexagon) lift nub on the inside of the fob pocket's outer long wall,
     # pointing into the pocket. Underside is a 60 deg slope, so no supports.
@@ -165,5 +184,5 @@ if __name__ == "__main__":
     bb = t.val().BoundingBox()
     print(f"size {bb.xlen:.1f} x {bb.ylen:.1f} x {bb.zlen:.1f} mm, volume {t.val().Volume()/1000:.1f} cm3")
     print(f"wide {BODY_L:.1f} x {BODY_W:.1f}, narrow {TONGUE_L:.1f} x {TONGUE_W:.1f}, height {HEIGHT}")
-    print(f"fob pocket {POCKET_L} x {POCKET_W:.1f}, left bin {BIN_L:.1f}, cradle top {cradle_top:.2f}")
+    print(f"fob pocket {POCKET_L} x {POCKET_W:.1f}, left bin {BIN_L:.1f}, trough y {y_trough0:.1f}..{cy + ch_r:.1f}")
     print(f"channel x {x_ch0:.1f}..{x_ch1:.1f} (narrow section ends at x=0)")
