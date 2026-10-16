@@ -6,7 +6,7 @@
 | **Area** | front tray (the strip between the cupholders and the drive-mode panel) |
 | **Claude project** | "Kona 3d print organiser", thread "Front console organiser" (claude.ai, cloud session) |
 | **People** | Charlimit, Claude |
-| **Status** | v1 and v2 test printed. v3 delivered, not yet test printed. Fob pocket tilt direction open (decision card) |
+| **Status** | v1 and v2 test printed. v3 delivered, not yet test printed. Fob pocket angle waiting on Charlimit's drawing |
 | **Type** | Record (summary written by Claude, not a verbatim transcript). The visible messages are in [`raw/2026-10-12-front-console-tray.md`](raw/2026-10-12-front-console-tray.md) |
 
 ## Summary
@@ -49,7 +49,7 @@ v3: the narrow section is 27.5 mm (1.75 mm clearance per side), and the tray is 
 | front-v3 | 2026-10-16 05:05 | Tab 27.5 mm, 159.6 mm long, open balm trough with finger space, fob floor tilted |
 
 ## Open questions
-- Which way the fob pocket should angle: down towards the right end (built), towards the panel, or turned diagonally.
+- Which way the fob pocket should angle. Charlimit will send a drawing; v3 has a placeholder 6° tilt towards the right end.
 - Whether "overall width too long" meant the length (built) or the 44 mm width.
 
 ## Follow-ups

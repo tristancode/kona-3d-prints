@@ -58,12 +58,17 @@ The front one needs rework, the tab on the left is too wide by about 2mm. The ov
 
 ---
 
-**Claude · 2026-10-16 05:05**
+**Charlimit · 2026-10-16 04:48** (in reply to Claude's card asking which way the fob pocket should angle)
 
-v3 is ready and committed as front v3.
+I will draw it
+
+---
+
+**Claude · 2026-10-16 05:08**
+
+Sounds good. Send the drawing and I'll redo the fob pocket from it. Everything else is done in v3, committed as front v3:
 
 - The left tab is 2 mm narrower (27.5 mm).
 - It's 2 mm shorter overall (159.6 mm). I read "overall width" as the length, because the width is set by the fob pocket. Tell me if you meant the width and I'll take 2 mm off that instead.
 - The lip balm sits in a plain half-cylinder trough with straight sides and closed ends, so nothing curves over the top. It's pushed against the drive-mode panel side, which leaves about 22 mm of open floor beside it for your fingers.
-- The fob pocket floor now tilts 6° down towards the right-hand end. If you meant a different angle, pick it on the card above.
-
+- For now the fob pocket floor tilts 6° down towards the right-hand end. Your drawing will replace that.
